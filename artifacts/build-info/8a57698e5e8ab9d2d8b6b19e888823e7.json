@@ -1,0 +1,71 @@
+{
+	"id": "8a57698e5e8ab9d2d8b6b19e888823e7",
+	"_format": "hh-sol-build-info-1",
+	"solcVersion": "0.8.17",
+	"solcLongVersion": "0.8.17+commit.8df45f5f",
+	"input": {
+		"language": "Solidity",
+		"sources": {
+			"MyToken.sol": {
+				"content": "// SPDX-License-Identifier: GPL-3.0\n\n// pragma solidity >=0.7.0 <0.9.0;\n\n// import \"@openzeppelin/contracts/token/ERC20/ERC20.sol\";\n\n// contract MyToken is ERC20 {\n\n// constructor () ERC20(\"Stardust Token\", \"STARDUST\") {\n// _mint(msg.sender, 1000000 * 10 ** decimals());\n// }\n// }"
+			}
+		},
+		"settings": {
+			"optimizer": {
+				"enabled": false,
+				"runs": 200
+			},
+			"outputSelection": {
+				"*": {
+					"": [
+						"ast"
+					],
+					"*": [
+						"abi",
+						"metadata",
+						"devdoc",
+						"userdoc",
+						"storageLayout",
+						"evm.legacyAssembly",
+						"evm.bytecode",
+						"evm.deployedBytecode",
+						"evm.methodIdentifiers",
+						"evm.gasEstimates",
+						"evm.assembly"
+					]
+				}
+			}
+		}
+	},
+	"output": {
+		"errors": [
+			{
+				"component": "general",
+				"errorCode": "3420",
+				"formattedMessage": "Warning: Source file does not specify required compiler version! Consider adding \"pragma solidity ^0.8.17;\"\n--> MyToken.sol\n\n",
+				"message": "Source file does not specify required compiler version! Consider adding \"pragma solidity ^0.8.17;\"",
+				"severity": "warning",
+				"sourceLocation": {
+					"end": -1,
+					"file": "MyToken.sol",
+					"start": -1
+				},
+				"type": "Warning"
+			}
+		],
+		"sources": {
+			"MyToken.sol": {
+				"ast": {
+					"absolutePath": "MyToken.sol",
+					"exportedSymbols": {},
+					"id": 1,
+					"license": "GPL-3.0",
+					"nodeType": "SourceUnit",
+					"nodes": [],
+					"src": "280:0:0"
+				},
+				"id": 0
+			}
+		}
+	}
+}

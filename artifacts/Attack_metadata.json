@@ -1,0 +1,102 @@
+{
+	"compiler": {
+		"version": "0.8.17+commit.8df45f5f"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "contract Vulnerable",
+						"name": "_vulnerable",
+						"type": "address"
+					}
+				],
+				"stateMutability": "payable",
+				"type": "constructor"
+			},
+			{
+				"stateMutability": "payable",
+				"type": "fallback"
+			},
+			{
+				"inputs": [],
+				"name": "getBalance",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "hack",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "vulnerable",
+				"outputs": [
+					{
+						"internalType": "contract Vulnerable",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"Attack.sol": "Attack"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"Attack.sol": {
+			"keccak256": "0xd15b1af82124c0605729ca20a489bd1300fa9d0badade5b52b90f629bf77ca3b",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://617e989a27b9388759ab36bf4ef9e5e2438b5234c7184bc58ba89fcba07c0ad3",
+				"dweb:/ipfs/QmXvsuy9xr8kq4t6asaSMW6nBFNN2QZUAoE8BDUbeM7RY4"
+			]
+		},
+		"Vulnerable.sol": {
+			"keccak256": "0x9af2e4141cdcafb645baa17018c99e06c3e840b9375982ec1b42f9039147dab7",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://590e71f8deb7bad1cfc0c4ac68e85cb313606edc30f79e36c296399336170aae",
+				"dweb:/ipfs/QmTezp4FHHR8SNfTU1HMeWCMWvzrJufAkjqhXsnggAcv6a"
+			]
+		}
+	},
+	"version": 1
+}
