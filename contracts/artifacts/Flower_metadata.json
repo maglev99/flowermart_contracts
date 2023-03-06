@@ -507,11 +507,11 @@
 			]
 		},
 		"contracts/Flower.sol": {
-			"keccak256": "0x974a6eeaec9f0df15335a8e31c505b4fa6ab001542be62f06059e91214364bda",
+			"keccak256": "0xed9a615cd2e144b3f11ef5528f2e289ae2867fd1ce5a8cfd31539a629c5a843d",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://7c9b00849197ec9a92514a1e92b0dddc7e8173fd21d9455466ce394533fb762b",
-				"dweb:/ipfs/QmSj4CDLaiHkndTHJfMsiqKwwwXfxk8e8h1xuSM97DWNeZ"
+				"bzz-raw://e65fb31598efbd1e4a8ecfe6cdd5027ec1d76769e1d19ca98941ac8615b3f57c",
+				"dweb:/ipfs/QmYQqMqGNtCq7jkvoGHLBTQBQrgWwSfNvbr94YNdTWePGp"
 			]
 		}
 	},
