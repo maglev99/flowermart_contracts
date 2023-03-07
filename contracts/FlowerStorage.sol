@@ -20,6 +20,11 @@ contract FlowerStorage is Ownable {
         uint256 next;
     }
 
+    // tracks total supply of flower token
+    uint256 public totalSupply;
+    // tracks total expired flower tokens
+    uint256 public totalExpired;
+
     // tracks flower token balance of each address by the time it was transferred to the address for expiry function
     // maps first node of balancesByTimestamp linked list by address
     mapping(address => uint256) public firstTBNode;
@@ -29,7 +34,7 @@ contract FlowerStorage is Ownable {
     mapping(address => mapping(uint256 => TBNode)) public tbNodeByIndex;
 
     // add a node to TBNode linked list when a user picks flowers
-    function addNode(address addr, uint256 timestamp, uint256 balance) public {
+    function addNode(address addr, uint256 timestamp, uint256 balance) private {
         // create a new TBNode
         TBNode memory newNode = TBNode({
             timestamp: timestamp,
@@ -90,6 +95,10 @@ contract FlowerStorage is Ownable {
 
         // update total balance in address to subract expired tokens 
         totalBalances[addr] -= totalTokensExpired;
+        // update total supply of tokens
+        totalSupply -= totalTokensExpired;
+        // update total expired tokens
+        totalExpired += totalTokensExpired;
     }
 
     // add flower tokens to address
@@ -103,9 +112,7 @@ contract FlowerStorage is Ownable {
         addNode(addr, timeAdded, amount);
         // update total balance in address
         totalBalances[addr] += amount;
+        // update total supply of tokens
+        totalSupply += amount;
     }
-
-    // TODO: (readonly) return total balance of address
-
-    // TODO: (readonly) return all nodes of address
 }
