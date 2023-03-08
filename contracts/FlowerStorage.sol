@@ -24,6 +24,8 @@ contract FlowerStorage is Ownable {
     uint256 public totalSupply;
     // tracks total expired flower tokens
     uint256 public totalExpired;
+    // tracks total burned flower tokens
+    uint256 public totalBurned;
 
     // tracks flower token balance of each address by the time it was transferred to the address for expiry function
     // maps first node of balancesByTimestamp linked list by address
@@ -115,4 +117,69 @@ contract FlowerStorage is Ownable {
         // update total supply of tokens
         totalSupply += amount;
     }
+
+    // burn tokens from address such as when burning Flower Token to mint Flower Coin
+    // iterate through mapping starting from first node to remove flower tokens 
+    function burnTokens(address addr, uint256 amount, uint256 timeToExpire) public {
+        // remove expired tokens first
+        // NOTE: tokens not actually removed if require statement below fails since whole transaction reverts
+        removeExpiredTokens(addr, timeToExpire);
+
+        // require amount remaining after removing expired tokens to be enough to burn
+        require(totalBalances[addr] >= amount, "Not enough tokens to burn");
+
+        // get current index and node to iterate
+        uint256 currentIndex =  firstTBNode[addr];
+        TBNode memory currentNode = tbNodeByIndex[addr][currentIndex];
+
+        // create temp variable for counting number of tokens that have been burned by node
+        uint256 amountBurned = 0;
+
+        // iterate through nodes until amount burned equals amount 
+        while (amountBurned < amount)
+        {
+            // get difference between amount and amount burned
+            uint256 diff = amount - amountBurned;
+
+            // empty and remove current node if it contains tokens less than or equal to amount
+            if (diff >= currentNode.balance)
+            {
+                // add current node balance to amount burned 
+                amountBurned += currentNode.balance;
+
+                // remove the node from the tbNodeByIndex mapping
+                delete tbNodeByIndex[addr][currentIndex];
+
+                // set firstTBNode to next node
+                firstTBNode[addr] = currentNode.next;
+                // if node is the only node availble set lastTBNode to next node (which is 0)
+                if (lastTBNode[addr] == currentIndex)
+                {
+                    lastTBNode[addr] = currentNode.next;
+                }
+
+                // set current index to next node
+                currentIndex = currentNode.next;
+                currentNode = tbNodeByIndex[addr][currentIndex];          
+            }
+
+            // if difference in balance less than node balance subtract difference from balance 
+            else
+            {
+                // update the amount burned
+                amountBurned += diff;
+                // update the balance of the node to subtract
+                tbNodeByIndex[addr][currentIndex].balance -= diff;
+            }
+        }
+
+        // update total balance in address to subract burned tokens 
+        totalBalances[addr] -= amountBurned;
+        // update total supply of tokens
+        totalSupply -= amountBurned;
+        // update total burned tokens
+        totalBurned += amountBurned;
+    }
+
+    // TODO: instead of parameter change timeToExpire to a variable to reduce errors of calling functions with different unintended timeToExpire
 }
