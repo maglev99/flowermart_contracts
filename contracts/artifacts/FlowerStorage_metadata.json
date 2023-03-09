@@ -311,11 +311,11 @@
 			]
 		},
 		"contracts/FlowerStorage.sol": {
-			"keccak256": "0xdc1755072d23bb6d2a93b43a1a008c60ff38c24f7c62dce42b47c9d7621d6b3d",
+			"keccak256": "0x96c85556b4fb5f6483cb8e22d802854f26efee264d7573c66f84482779596b0d",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://71118f637e153f9d74f4ea3cfc78d92b670b9618ea6a443f4a5ead1c19cdffc3",
-				"dweb:/ipfs/QmaT5qnbfrSSmSWmjuuLCeUdZ7AQAxgSKRuYqGMNS7mKrH"
+				"bzz-raw://88cd0bb0beb1dd1821322a6affba17b55424847961fe12426b107f24856adad8",
+				"dweb:/ipfs/Qmd1UoxebZjY8jyGxGqN376uMqBd7HRcUXtMgKVdKeKR1h"
 			]
 		}
 	},
