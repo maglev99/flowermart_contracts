@@ -10,6 +10,7 @@ contract FlowerStorage is Ownable {
         transferOwnership(msg.sender);
     }
 
+    // separate flower storage into just this total balance
     // tracks total flower token balance of each address
     mapping ( address => uint256 ) public totalBalances;
 
@@ -65,6 +66,7 @@ contract FlowerStorage is Ownable {
         }
     }
 
+    // TODO: move expire , mint burn into flower conductor
     // remove expired TBNodes based on time to expire
     function expire(address addr, uint256 timeToExpire) public onlyOwner {
         uint256 currentIndex =  firstTBNode[addr];
@@ -103,6 +105,7 @@ contract FlowerStorage is Ownable {
         totalExpired += totalTokensExpired;
     }
 
+    // NOTE: think about separating just storage to separate contract
     // mint flower tokens to address
     function mint(address addr, uint256 amount, uint256 timeToExpire) public onlyOwner {
         // remove expired tokens before adding new ones

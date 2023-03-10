@@ -15,6 +15,8 @@ contract FlowerConductor is Ownable {
     // exchange rate for burning flower token to mint flowerCoin
     uint256 public flowersPerFlowerCoin = 1;
 
+    // TODO: Add events
+
     constructor(address flowerStorageAddress, address flowerCoinStorageAddress) {
         // Set the deployer as the initial owner
         transferOwnership(msg.sender);
@@ -95,23 +97,23 @@ contract FlowerConductor is Ownable {
     }
 
     // mint flower coins by burning flower tokens
-    function mintFlowerCoinWithFlower(address from, address to, uint256 amount) public onlyOwner {
+    function mintFlowerCoinWithFlower(address to, uint256 amount) public {
         // burn flower tokens in from address 
-        burnFlower(from, amount * flowersPerFlowerCoin);
+        burnFlower(msg.sender, amount * flowersPerFlowerCoin);
         // mint flowerCoins to address
         // flowerCoins should only stay in the flowerCoinStorage contract and the contract keeps a mapping of who has what amount
         flowerCoinStorage.mint(to, amount);
     }
 
     // transfer flower coins 
-    function transferFlowerCoin(address from, address to, uint256 amount) public onlyOwner {
-        flowerCoinStorage.transfer(from, to, amount);
+    function transferFlowerCoin(address to, uint256 amount) public {
+        flowerCoinStorage.transfer(msg.sender, to, amount);
     }
 
     // transfer both flower and flowercoins at once 
-    function transfer(address from, address to, uint256 flowerAmount, uint256 flowerCoinAmount) public onlyOwner {
-        mintFlowerCoinWithFlower(from, to, flowerAmount);
-        transferFlowerCoin(from, to, flowerCoinAmount);
+    function transfer(address to, uint256 flowerAmount, uint256 flowerCoinAmount) public {
+        mintFlowerCoinWithFlower(to, flowerAmount);
+        transferFlowerCoin(to, flowerCoinAmount);
     }
 
 }
