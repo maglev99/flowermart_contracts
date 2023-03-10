@@ -40,11 +40,6 @@
 						"internalType": "uint256",
 						"name": "amount",
 						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "timeToExpire",
-						"type": "uint256"
 					}
 				],
 				"name": "burn",
@@ -61,68 +56,7 @@
 					},
 					{
 						"internalType": "uint256",
-						"name": "timeToExpire",
-						"type": "uint256"
-					}
-				],
-				"name": "expire",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"name": "firstTBNode",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"name": "lastTBNode",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "addr",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
 						"name": "amount",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "timeToExpire",
 						"type": "uint256"
 					}
 				],
@@ -149,40 +83,6 @@
 				"name": "renounceOwnership",
 				"outputs": [],
 				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "tbNodeByIndex",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "timestamp",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "balance",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "next",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -219,7 +119,7 @@
 			},
 			{
 				"inputs": [],
-				"name": "totalExpired",
+				"name": "totalSupply",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -231,16 +131,26 @@
 				"type": "function"
 			},
 			{
-				"inputs": [],
-				"name": "totalSupply",
-				"outputs": [
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "from",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "to",
+						"type": "address"
+					},
 					{
 						"internalType": "uint256",
-						"name": "",
+						"name": "amount",
 						"type": "uint256"
 					}
 				],
-				"stateMutability": "view",
+				"name": "transfer",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -280,7 +190,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/FlowerStorage.sol": "FlowerStorage"
+			"contracts/FlowerCoinStorage.sol": "FlowerCoinStorage"
 		},
 		"evmVersion": "istanbul",
 		"libraries": {},
@@ -310,12 +220,12 @@
 				"dweb:/ipfs/QmRK2Y5Yc6BK7tGKkgsgn3aJEQGi5aakeSPZvS65PV8Xp3"
 			]
 		},
-		"contracts/FlowerStorage.sol": {
-			"keccak256": "0x14fa29cf3d1fddaf7de7304f83c9490d26e697715677de944e26d01684abce3a",
+		"contracts/FlowerCoinStorage.sol": {
+			"keccak256": "0x9c6b8033a7b9bed388fbfd9da438a70f104ab0b0cc400ca67d49e963b1b63157",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://6f2a2836a788c8186bd4d0c40497bd71f31bfd75459d0b73331258d7a6c31deb",
-				"dweb:/ipfs/QmW9ednRoTcctycxA5HSVwpCEfPFyYFr2cZvKnx5xNJhKc"
+				"bzz-raw://a54a3604879467d6d018c381bfe4796f9f7dbb6baa52f457dd78848ab51e6065",
+				"dweb:/ipfs/QmcMWEZwWnZGKRfX7DaoHawC2PZCTWtswZhDv4aPsVHdfB"
 			]
 		}
 	},

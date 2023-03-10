@@ -66,7 +66,7 @@ contract FlowerStorage is Ownable {
     }
 
     // remove expired TBNodes based on time to expire
-    function removeExpiredTokens(address addr, uint256 timeToExpire) public onlyOwner {
+    function expire(address addr, uint256 timeToExpire) public onlyOwner {
         uint256 currentIndex =  firstTBNode[addr];
         TBNode memory currentNode = tbNodeByIndex[addr][currentIndex];
 
@@ -103,10 +103,10 @@ contract FlowerStorage is Ownable {
         totalExpired += totalTokensExpired;
     }
 
-    // add flower tokens to address
-    function addTokens(address addr, uint256 amount, uint256 timeToExpire) public onlyOwner {
+    // mint flower tokens to address
+    function mint(address addr, uint256 amount, uint256 timeToExpire) public onlyOwner {
         // remove expired tokens before adding new ones
-        removeExpiredTokens(addr, timeToExpire);
+        expire(addr, timeToExpire);
 
         //set time added
         uint256 timeAdded = block.timestamp;
@@ -120,10 +120,10 @@ contract FlowerStorage is Ownable {
 
     // burn tokens from address such as when burning Flower Token to mint Flower Coin
     // iterate through mapping starting from first node to remove flower tokens 
-    function burnTokens(address addr, uint256 amount, uint256 timeToExpire) public onlyOwner {
+    function burn(address addr, uint256 amount, uint256 timeToExpire) public onlyOwner {
         // remove expired tokens first
         // NOTE: tokens not actually removed if require statement below fails since whole transaction reverts
-        removeExpiredTokens(addr, timeToExpire);
+        expire(addr, timeToExpire);
 
         // require amount remaining after removing expired tokens to be enough to burn
         require(totalBalances[addr] >= amount, "Not enough tokens to burn");
