@@ -46,7 +46,31 @@ contract FlowerConductor is Ownable {
         return flowerStorage.totalBurned();
     }
 
-    // TODO: get a set number/all nodes for an address in flowerStorage to know how many tokens are expiring when
+    // Get a set number/all nodes for an address in flowerStorage to know how many tokens are expiring at what time
+    function getBalanceNodes(address _addr, uint256 _numNodes) public view returns (TBNode[] memory) {
+        // get total length of nodes in address by subtracting last and first node 
+        uint head = flowerStorage.firstTBNode(_addr);
+        uint256 len = flowerStorage.lastTBNode(_addr) - head + 1;
+        // if num nodes to return not specified or greater than length of linked list return all nodes
+        if (_numNodes == 0 || _numNodes > len) {
+            _numNodes = len;
+        }
+
+        // create array of nodes
+        TBNode[] memory nodes = new TBNode[](_numNodes);
+        uint256 index = 0;
+
+        // add nodes to array
+        while (index < _numNodes)
+        {
+            nodes[index] = flowerStorage.getTBNodeByIndex(_addr, head);
+            // increment head to fetch next node
+            head++;
+            index++;
+        }
+
+        return nodes;
+    }
 
     // view functions for FlowerCoin
     function FlowerCoinTotalBalance(address addr) external view returns (uint256) {
@@ -74,12 +98,7 @@ contract FlowerConductor is Ownable {
 
     // expire flower
     function expireFlower(address addr) public onlyOwner {
-        expire(addr);
-    }
-
-   function expire(address addr) public onlyOwner {
-        uint256 currentIndex = flowerStorage.firstTBNode(addr);  // firstTBNode[addr];
-        //TBNode memory currentNode = flowerStorage.tbNodeByIndex(addr, currentIndex); // tbNodeByIndex[addr][currentIndex];
+        uint256 currentIndex = flowerStorage.firstTBNode(addr);  
         TBNode memory currentNode = flowerStorage.getTBNodeByIndex(addr, currentIndex);
 
         // stores amount of tokens expired to be removed from address total balance at the end
@@ -119,12 +138,8 @@ contract FlowerConductor is Ownable {
 
     // mint flower 
     function mintFlower(address addr, uint256 amount) public onlyOwner {
-        mint(addr, amount);
-    }
-
-    function mint(address addr, uint256 amount) public onlyOwner {
         // remove expired tokens before adding new ones
-        expire(addr);
+        expireFlower(addr);
 
         //set time added
         uint256 timeAdded = block.timestamp;
@@ -137,15 +152,11 @@ contract FlowerConductor is Ownable {
     }
 
     // burn flower
-    function burnFlower(address addr, uint256 amount) public onlyOwner {
-        burn(addr, amount);
-    }
-
     // iterate through mapping starting from first node to remove flower tokens 
-    function burn(address addr, uint256 amount) public onlyOwner {
+    function burnFlower(address addr, uint256 amount) public onlyOwner {
         // remove expired tokens first
         // NOTE: tokens not actually removed if require statement below fails since whole transaction reverts
-        expire(addr);
+        expireFlower(addr);
 
         // require amount remaining after removing expired tokens to be enough to burn
         require(flowerStorage.totalBalances(addr) >= amount, "Not enough tokens to burn");
@@ -232,5 +243,4 @@ contract FlowerConductor is Ownable {
         mintFlowerCoinWithFlower(to, flowerAmount);
         transferFlowerCoin(to, flowerCoinAmount);
     }
-
 }
