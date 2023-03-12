@@ -3,6 +3,7 @@ pragma solidity 0.8.4;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./FlowerCoinStorage.sol";
 import "./FlowerStorage.sol";
+import "./TBNode.sol";
 
 // handles minting (for now) and transfer and sending expired flower tokens to burn address 
 contract FlowerConductor is Ownable {
@@ -73,17 +74,133 @@ contract FlowerConductor is Ownable {
 
     // expire flower
     function expireFlower(address addr) public onlyOwner {
-        flowerStorage.expire(addr, timeToExpire);
+        expire(addr);
+    }
+
+   function expire(address addr) public onlyOwner {
+        uint256 currentIndex = flowerStorage.firstTBNode(addr);  // firstTBNode[addr];
+        //TBNode memory currentNode = flowerStorage.tbNodeByIndex(addr, currentIndex); // tbNodeByIndex[addr][currentIndex];
+        TBNode memory currentNode = flowerStorage.getTBNodeByIndex(addr, currentIndex);
+
+        // stores amount of tokens expired to be removed from address total balance at the end
+        uint256 totalTokensExpired = 0;
+
+        // if nodes exist iterate through and remove nodes that have expired
+        while (currentIndex != 0 && currentNode.timestamp + timeToExpire <= block.timestamp)
+        {
+            // set firstTBNode to next node
+            flowerStorage.setFirstTBNode(addr, currentNode.next);
+            // if node is the only node availble set lastTBNode to next node (which is 0)
+            if (flowerStorage.lastTBNode(addr) == currentIndex)
+            {
+                flowerStorage.setLastTBNode(addr, currentNode.next);
+            }
+
+            // add add node balance to total tokens that have expired
+            totalTokensExpired += currentNode.balance;
+            
+            // remove the node from the tbNodeByIndex mapping
+            flowerStorage.removeTBNodeByIndex(addr, currentIndex);
+
+            // set current index to next node
+            currentIndex = currentNode.next;
+            currentNode = flowerStorage.getTBNodeByIndex(addr, currentIndex);       
+        }
+
+        // update total balance in address to subract expired tokens 
+        flowerStorage.subtractBalance(addr, totalTokensExpired);
+
+        // update total supply of tokens
+        flowerStorage.subtractTotalSupply(totalTokensExpired);
+
+        // update total expired tokens
+        flowerStorage.addTotalExpired(totalTokensExpired);
     }
 
     // mint flower 
     function mintFlower(address addr, uint256 amount) public onlyOwner {
-        flowerStorage.mint(addr, amount, timeToExpire);
+        mint(addr, amount);
+    }
+
+    function mint(address addr, uint256 amount) public onlyOwner {
+        // remove expired tokens before adding new ones
+        expire(addr);
+
+        //set time added
+        uint256 timeAdded = block.timestamp;
+        // add tokens and timestamp to linked list
+        flowerStorage.addNode(addr, timeAdded, amount);
+        // update total balance in address
+        flowerStorage.addBalance(addr, amount);
+        // update total supply of tokens
+        flowerStorage.addTotalSupply(amount);
     }
 
     // burn flower
     function burnFlower(address addr, uint256 amount) public onlyOwner {
-        flowerStorage.burn(addr, amount, timeToExpire);
+        burn(addr, amount);
+    }
+
+    // iterate through mapping starting from first node to remove flower tokens 
+    function burn(address addr, uint256 amount) public onlyOwner {
+        // remove expired tokens first
+        // NOTE: tokens not actually removed if require statement below fails since whole transaction reverts
+        expire(addr);
+
+        // require amount remaining after removing expired tokens to be enough to burn
+        require(flowerStorage.totalBalances(addr) >= amount, "Not enough tokens to burn");
+
+        // get current index and node to iterate
+        uint256 currentIndex =  flowerStorage.firstTBNode(addr);
+        TBNode memory currentNode = flowerStorage.getTBNodeByIndex(addr, currentIndex);
+
+        // create temp variable for counting number of tokens that have been burned by node
+        uint256 amountBurned = 0;
+
+        // iterate through nodes until amount burned equals amount 
+        while (amountBurned < amount)
+        {
+            // get difference between amount and amount burned
+            uint256 diff = amount - amountBurned;
+
+            // empty and remove current node if it contains tokens less than or equal to amount
+            if (diff >= currentNode.balance)
+            {
+                // add current node balance to amount burned 
+                amountBurned += currentNode.balance;
+
+                // remove the node from the tbNodeByIndex mapping
+                flowerStorage.removeTBNodeByIndex(addr, currentIndex);
+
+                // set firstTBNode to next node
+                flowerStorage.setFirstTBNode(addr, currentNode.next);
+                // if node is the only node availble set lastTBNode to next node (which is 0)
+                if (flowerStorage.lastTBNode(addr) == currentIndex)
+                {
+                    flowerStorage.setLastTBNode(addr, currentNode.next);
+                }
+
+                // set current index to next node
+                currentIndex = currentNode.next;
+                currentNode = flowerStorage.getTBNodeByIndex(addr, currentIndex);
+            }
+
+            // if difference in balance less than node balance subtract difference from balance 
+            else
+            {
+                // update the amount burned
+                amountBurned += diff;
+                // update the balance of the node to subtract
+                flowerStorage.subtractTBNodeByIndexBalance(addr, currentIndex, diff);
+            }
+        }
+
+        // update total balance in address to subract burned tokens 
+        flowerStorage.subtractBalance(addr, amountBurned);
+        // update total supply of tokens
+        flowerStorage.subtractTotalSupply(amountBurned);
+        // update total burned tokens
+        flowerStorage.addTotalBurned(amountBurned);
     }
 
     // mint flower coins 
