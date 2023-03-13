@@ -1,0 +1,117 @@
+{
+	"compiler": {
+		"version": "0.8.4+commit.c7e474f2"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [],
+				"name": "flowerCoinStorage",
+				"outputs": [
+					{
+						"internalType": "contract FlowerCoinStorage",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "flowerStorage",
+				"outputs": [
+					{
+						"internalType": "contract FlowerStorage",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/Registry.sol": "Registry"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"@openzeppelin/contracts/access/Ownable.sol": {
+			"keccak256": "0xa94b34880e3c1b0b931662cb1c09e5dfa6662f31cba80e07c5ee71cd135c9673",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://40fb1b5102468f783961d0af743f91b9980cf66b50d1d12009f6bb1869cea4d2",
+				"dweb:/ipfs/QmYqEbJML4jB1GHbzD4cUZDtJg5wVwNm3vDJq1GbyDus8y"
+			]
+		},
+		"@openzeppelin/contracts/utils/Context.sol": {
+			"keccak256": "0xe2e337e6dde9ef6b680e07338c493ebea1b5fd09b43424112868e9cc1706bca7",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://6df0ddf21ce9f58271bdfaa85cde98b200ef242a05a3f85c2bc10a8294800a92",
+				"dweb:/ipfs/QmRK2Y5Yc6BK7tGKkgsgn3aJEQGi5aakeSPZvS65PV8Xp3"
+			]
+		},
+		"contracts/FlowerCoinStorage.sol": {
+			"keccak256": "0x9c6b8033a7b9bed388fbfd9da438a70f104ab0b0cc400ca67d49e963b1b63157",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://a54a3604879467d6d018c381bfe4796f9f7dbb6baa52f457dd78848ab51e6065",
+				"dweb:/ipfs/QmcMWEZwWnZGKRfX7DaoHawC2PZCTWtswZhDv4aPsVHdfB"
+			]
+		},
+		"contracts/FlowerStorage.sol": {
+			"keccak256": "0x4d37f10419197407ed04d0d1c0cf46e60b38e9fb4ad24f1052a7b2c9a1bdfdc9",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://6a46043883ea6e05d203ae322225ad2785cea0bd5160cc2a55bbdf1209d22a2f",
+				"dweb:/ipfs/QmRWABFAcSRQjUYFXbDfjcAopEygy7tnjLdhCHmD9teEvB"
+			]
+		},
+		"contracts/Registry.sol": {
+			"keccak256": "0x5e5b5cfa780d2e64ea0d15ad5e91072ed6a9afb91ecbbbb336ef4fa8e298b2ba",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://64211c0775ea160e67c9e2b4a361edb2d14d5525f90d3557821e32e625268be3",
+				"dweb:/ipfs/QmXuY8M1o5X5R2coeXWoouoRSkQbUXcHmV53QTDXcbwEkQ"
+			]
+		},
+		"contracts/TBNode.sol": {
+			"keccak256": "0x0f98f5ac4cb18bcc256b7d482a0ff2fd5995bab04233186b165a9ba40e873820",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://a6e5cbe3107784806aa0e5df16f64be071fae9895f85567283daadbeb1ca75c2",
+				"dweb:/ipfs/QmRyKNPgnquXeqiaGqvRY4jx3hToawobwrfu2cXDN8juBK"
+			]
+		}
+	},
+	"version": 1
+}

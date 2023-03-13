@@ -1,0 +1,66 @@
+{
+	"compiler": {
+		"version": "0.8.4+commit.c7e474f2"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"name": "createNewContract",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "newContractAddress",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/Registry.sol": "MyContract"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/Registry.sol": {
+			"keccak256": "0xb4346ad42ec8847140cd59b60e878a06cfd7fdd5813337b4337208486032e722",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://676b8568adf9744a66607bcb7438bf5af449d53d4ce9f9d1f306e21dd1316b75",
+				"dweb:/ipfs/QmSpUKQD5qZ237Czv1gSXCqvqUa9R4EqmxZ9jX8mdnAEfm"
+			]
+		}
+	},
+	"version": 1
+}
