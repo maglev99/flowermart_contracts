@@ -16,7 +16,15 @@ contract FlowerConductor is Ownable {
     // exchange rate for burning flower token to mint flowerCoin
     uint256 public flowersPerFlowerCoin = 1;
 
-    // TODO: Add events
+    // Flower Events 
+    event MintFlower(address indexed addr, uint256 indexed timestamp, uint256 amount);
+    event ExpireFlower(address indexed addr, uint256 indexed timestamp, uint256 amount);
+    event BurnFlower(address indexed addr, uint256 indexed timestamp, uint256 amount);
+
+    // FlowerCoin Events
+    event MintFlowerCoin(address indexed addr, uint256 indexed timestamp, uint256 amount);
+    event BurnFlowerCoin(address indexed addr, uint256 indexed timestamp, uint256 amount);   
+    event TransferFlowerCoin(address indexed from, address indexed to, uint256 amount);  
 
     constructor(address flowerStorageAddress, address flowerCoinStorageAddress) {
         // Set the deployer as the initial owner
@@ -134,6 +142,9 @@ contract FlowerConductor is Ownable {
 
         // update total expired tokens
         flowerStorage.addTotalExpired(totalTokensExpired);
+
+        // EVENT: emit expire flower event
+        emit ExpireFlower(addr, block.timestamp, totalTokensExpired);
     }
 
     // mint flower 
@@ -149,6 +160,9 @@ contract FlowerConductor is Ownable {
         flowerStorage.addBalance(addr, amount);
         // update total supply of tokens
         flowerStorage.addTotalSupply(amount);
+
+        // EVENT: emit mint flower event
+        emit MintFlower(addr, timeAdded, amount);
     }
 
     // burn flower
@@ -212,16 +226,25 @@ contract FlowerConductor is Ownable {
         flowerStorage.subtractTotalSupply(amountBurned);
         // update total burned tokens
         flowerStorage.addTotalBurned(amountBurned);
+
+        // EVENT: emit burn flower event
+        emit BurnFlower(addr, block.timestamp, amountBurned);
     }
 
     // mint flower coins 
     function mintFlowerCoin(address to, uint256 amount) public onlyOwner {
         flowerCoinStorage.mint(to, amount);
+
+        // EVENT: emit mint flower coins event
+        emit MintFlowerCoin(to, block.timestamp, amount);
     }
 
     // burn flower coins
      function burnFlowerCoin(address addr, uint256 amount) public onlyOwner {
         flowerCoinStorage.burn(addr, amount);
+
+        // EVENT: burn mint flower coins event
+        emit BurnFlowerCoin(addr, block.timestamp, amount);
     }
 
     // mint flower coins by burning flower tokens
@@ -230,17 +253,24 @@ contract FlowerConductor is Ownable {
         burnFlower(msg.sender, amount * flowersPerFlowerCoin);
         // mint flowerCoins to address
         // flowerCoins should only stay in the flowerCoinStorage contract and the contract keeps a mapping of who has what amount
-        flowerCoinStorage.mint(to, amount);
+        mintFlowerCoin(to, amount);
     }
 
     // transfer flower coins 
     function transferFlowerCoin(address to, uint256 amount) public {
         flowerCoinStorage.transfer(msg.sender, to, amount);
+
+        // EVENT: emit transfer flower coin event
+        emit TransferFlowerCoin(msg.sender, to, amount);
     }
 
     // transfer both flower and flowercoins at once 
     function transfer(address to, uint256 flowerAmount, uint256 flowerCoinAmount) public {
         mintFlowerCoinWithFlower(to, flowerAmount);
+
+        // EVENT: emit transfer flower coin event for the flowers converted to flowerCoin
+        emit TransferFlowerCoin(msg.sender, to, flowerAmount * flowersPerFlowerCoin);
+
         transferFlowerCoin(to, flowerCoinAmount);
     }
 }
