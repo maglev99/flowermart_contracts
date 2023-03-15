@@ -102,11 +102,11 @@
 			]
 		},
 		"contracts/FlowerConductor.sol": {
-			"keccak256": "0x9bff452fb8ab0901c7cea713b33316eafd34d66981376811cb3b70496b196d9d",
+			"keccak256": "0xdef654e3bfb6b5f1018559a27122c5343df5be3115f0c656a9ea03ea999e057d",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://a980af3a29a04509f42005dcf44e27929db7fc67f91fa836121e783f5a65bfaf",
-				"dweb:/ipfs/QmVcYEvhVhY22N4UiB85kDQnqKnibN4F3dpDJUdvm6pzMg"
+				"bzz-raw://fd0096fda6b5e10053eb21e10a74176af3f284cd9e5dcbd68e3b098985f95b13",
+				"dweb:/ipfs/QmTNq5LcrHj3Zj8Nb6hE9rDqjbptpBRkjyD9sXswAj3392"
 			]
 		},
 		"contracts/FlowerStorage.sol": {
@@ -118,11 +118,11 @@
 			]
 		},
 		"contracts/Registry.sol": {
-			"keccak256": "0x4a69aa28c5a24d41cfe2b8d79b704ee901d283e04b576a9f3ff1afbcf9a77328",
+			"keccak256": "0xc37fdbb87228408fdeb2567f61fa9bf16d82e6c016e3f7370e0a3ea3738466f2",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://7867eb8b4babc7582a0d0866c5679c5bf44d51b38fc7829ef10f3817db05c2cb",
-				"dweb:/ipfs/QmQmyidv5VuruJhWRxWmBa9RrtuDHcyPKDfCsgx5GXSYpH"
+				"bzz-raw://b6576832c616e43904669d44731a96c0d0d1bdb6a0e3b63d467a158823e0490c",
+				"dweb:/ipfs/QmWGyqMGF5ht2xEDkzwtKt9zSY7ReiJw1SdDvTrSJgMNfT"
 			]
 		},
 		"contracts/TBNode.sol": {

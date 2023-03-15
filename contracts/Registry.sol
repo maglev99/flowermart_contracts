@@ -16,5 +16,9 @@ contract Registry {
         flowerStorage = new FlowerStorage();
         flowerCoinStorage = new FlowerCoinStorage();
         flowerConductor = new FlowerConductor(address(flowerStorage), address(flowerCoinStorage));
+
+        // set owners of flowerStorage and flowerCoinStorage contracts
+        flowerStorage.transferOwnership(address(flowerConductor));
+        flowerCoinStorage.transferOwnership(address(flowerConductor));
     }
 }

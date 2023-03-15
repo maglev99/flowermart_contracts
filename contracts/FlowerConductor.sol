@@ -22,7 +22,7 @@ contract FlowerConductor is Ownable {
     event BurnFlower(address indexed addr, uint256 indexed timestamp, uint256 amount);
 
     // FlowerCoin Events
-    event MintFlowerCoin(address indexed addr, uint256 indexed timestamp, uint256 amount);
+    event MintFlowerCoin(address indexed from, address indexed to, uint256 amount); // use from and to address here since mint happens when there is a transfer and knowing sender/receiver address more useful 
     event BurnFlowerCoin(address indexed addr, uint256 indexed timestamp, uint256 amount);   
     event TransferFlowerCoin(address indexed from, address indexed to, uint256 amount);  
 
@@ -236,7 +236,7 @@ contract FlowerConductor is Ownable {
         flowerCoinStorage.mint(to, amount);
 
         // EVENT: emit mint flower coins event
-        emit MintFlowerCoin(to, block.timestamp, amount);
+        emit MintFlowerCoin(msg.sender, to, amount);
     }
 
     // burn flower coins
@@ -252,7 +252,6 @@ contract FlowerConductor is Ownable {
         // burn flower tokens in from address 
         burnFlower(msg.sender, amount * flowersPerFlowerCoin);
         // mint flowerCoins to address
-        // flowerCoins should only stay in the flowerCoinStorage contract and the contract keeps a mapping of who has what amount
         mintFlowerCoin(to, amount);
     }
 
@@ -267,9 +266,6 @@ contract FlowerConductor is Ownable {
     // transfer both flower and flowercoins at once 
     function transfer(address to, uint256 flowerAmount, uint256 flowerCoinAmount) public {
         mintFlowerCoinWithFlower(to, flowerAmount);
-
-        // EVENT: emit transfer flower coin event for the flowers converted to flowerCoin
-        emit TransferFlowerCoin(msg.sender, to, flowerAmount * flowersPerFlowerCoin);
 
         transferFlowerCoin(to, flowerCoinAmount);
     }
