@@ -3,12 +3,14 @@ pragma solidity 0.8.4;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./FlowerCoinStorage.sol";
 import "./FlowerStorage.sol";
+import "./FlowerFaucet.sol";
 import "./TBNode.sol";
 
 // handles minting (for now) and transfer and sending expired flower tokens to burn address 
 contract FlowerConductor is Ownable {
     FlowerStorage public flowerStorage;
     FlowerCoinStorage public flowerCoinStorage;
+    FlowerFaucet public flowerFaucet;
 
     // time to expire when calling flower token actions
     uint256 public timeToExpire = 30;
@@ -26,7 +28,7 @@ contract FlowerConductor is Ownable {
     event BurnFlowerCoin(address indexed addr, uint256 indexed timestamp, uint256 amount);   
     event TransferFlowerCoin(address indexed from, address indexed to, uint256 amount);  
 
-    constructor(address flowerStorageAddress, address flowerCoinStorageAddress) {
+    constructor(address flowerStorageAddress, address flowerCoinStorageAddress, address flowerFaucetAddress) {
         // Set the deployer as the initial owner
         transferOwnership(msg.sender);
 
@@ -35,9 +37,18 @@ contract FlowerConductor is Ownable {
 
         // set flowerCoinStorage address
         flowerCoinStorage = FlowerCoinStorage(flowerCoinStorageAddress);
+
+        // set flowerFaucet address
+        flowerFaucet = FlowerFaucet(flowerFaucetAddress);
     }
 
-    // view functions for Flower
+    // MODIFIER that limits to only contract owner or flower faucet can perform action
+    modifier onlyOwnerOrFlowerFaucet() {
+        require(msg.sender == owner() || msg.sender == address(flowerFaucet), "Only owner or flower faucet can perform action");
+        _;
+    }
+
+    // VIEW functions for Flower
     function FlowerTotalBalance(address addr) external view returns (uint256) {
         return flowerStorage.totalBalances(addr);
     }
@@ -148,7 +159,7 @@ contract FlowerConductor is Ownable {
     }
 
     // mint flower 
-    function mintFlower(address addr, uint256 amount) public onlyOwner {
+    function mintFlower(address addr, uint256 amount) public onlyOwnerOrFlowerFaucet {
         // remove expired tokens before adding new ones
         expireFlower(addr);
 

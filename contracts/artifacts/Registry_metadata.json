@@ -102,11 +102,11 @@
 			]
 		},
 		"contracts/FlowerConductor.sol": {
-			"keccak256": "0xdef654e3bfb6b5f1018559a27122c5343df5be3115f0c656a9ea03ea999e057d",
+			"keccak256": "0x3566a072680c978828cdc1947bb79498119db0464a17874e850830be9a9a93f2",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://fd0096fda6b5e10053eb21e10a74176af3f284cd9e5dcbd68e3b098985f95b13",
-				"dweb:/ipfs/QmTNq5LcrHj3Zj8Nb6hE9rDqjbptpBRkjyD9sXswAj3392"
+				"bzz-raw://f9875347c6dd243004545cc0498e01c879929ca4ebb7f3609e96c0be5b57799f",
+				"dweb:/ipfs/QmakbCfUpJZbbxhN9169Zct5F4XqVn2CSbZa84Py5nvASd"
 			]
 		},
 		"contracts/FlowerStorage.sol": {

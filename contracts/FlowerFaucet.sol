@@ -7,14 +7,68 @@ import "./FlowerConductor.sol";
 // ** May need to schedule deployment as close to 00:00 UTC as possible so that easy to know when the claim window is refreshed
 
 contract FlowerFaucet is Ownable {
-    // the number of flowers available to be claimed by each account every 24 hours
+    FlowerConductor public flowerConductor;
+
+    // the number of flowers available to be claimed by each address every 24 hours
     uint256 public claimableAmount = 1000000000000000000; // 1.00 where unit denominated in wei
 
-    // TODO create mapping to store claimed amount
+    // the time faucet with reference for determining whether refresh 
+    uint256 public referenceTime;
 
-    // TODO store timestamps for checking claim refresh
+    // time interval when flowers can be claimed again
+    uint256 public refreshTime = 30;  // 30 sec for testing
 
-    // TODO create claim mechanism
+    // index that is the closest rounded down integer of (block.timestamp - referenceTime) / refreshTime
+    // for determining whether flowers can be claimed again
+    mapping ( address => uint256 ) public lastClaimedIndex;
 
-    // TODO create expiry/reset mechanism for unclaimed flower
+    constructor() {
+        // Set the deployer as the initial owner
+        transferOwnership(msg.sender);
+
+        // Set reference time to time of deployment
+        referenceTime = block.timestamp;
+    }
+
+    // Events 
+    event ClaimFlower(address indexed _addr, uint256 indexed timestamp, uint256 amount);
+
+    // set reference time for when flower will be refreshed
+    function setReferenceTime(uint256 _time) public onlyOwner {
+        referenceTime = _time;
+    }
+
+    // set flower conductor
+    function setFlowerConductor(address _addr) public onlyOwner {
+        flowerConductor = FlowerConductor(_addr);
+    }
+
+    // set claimable amount
+    function setClaimableAmount(uint256 _amount) public onlyOwner {
+        claimableAmount = _amount;
+    } 
+
+    // set refresh time
+    function setRefreshTime(uint256 _time) public onlyOwner {
+        refreshTime = _time;
+    }
+  
+    // claim flower
+    function claim(address _addr) public {
+        // get last claimed index to determine if address can claim flower at this time
+        uint256 claimedIndex = lastClaimedIndex[_addr];
+        uint256 currentIndex = (block.timestamp - referenceTime) / refreshTime;
+
+        // require to prevent claiming until time refreshed
+        require(currentIndex > claimedIndex, "Already claimed within time period, wait for refresh before claiming again");
+
+        // mint flower to address
+        flowerConductor.mintFlower(_addr, claimableAmount);
+
+        // update last claimed index of address with current index
+        lastClaimedIndex[_addr] = currentIndex;
+
+        // EVENT: emit claim flower event
+        emit ClaimFlower(_addr, block.timestamp, claimableAmount);
+    }
 }

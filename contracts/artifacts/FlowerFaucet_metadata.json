@@ -11,6 +11,31 @@
 					{
 						"indexed": true,
 						"internalType": "address",
+						"name": "_addr",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "timestamp",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "ClaimFlower",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
 						"name": "previousOwner",
 						"type": "address"
 					},
@@ -25,8 +50,53 @@
 				"type": "event"
 			},
 			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_addr",
+						"type": "address"
+					}
+				],
+				"name": "claim",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
 				"inputs": [],
 				"name": "claimableAmount",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "flowerConductor",
+				"outputs": [
+					{
+						"internalType": "contract FlowerConductor",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "lastClaimedTime",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -52,7 +122,59 @@
 			},
 			{
 				"inputs": [],
+				"name": "refreshTime",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
 				"name": "renounceOwnership",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_amount",
+						"type": "uint256"
+					}
+				],
+				"name": "setClaimableAmount",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_addr",
+						"type": "address"
+					}
+				],
+				"name": "setFlowerConductor",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_time",
+						"type": "uint256"
+					}
+				],
+				"name": "setRefreshTime",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -141,11 +263,11 @@
 			]
 		},
 		"contracts/FlowerFaucet.sol": {
-			"keccak256": "0x6ea48d81a1c578f859da04466706c9c15642a3f21d2e927dd88fa4c3a75aa9ad",
+			"keccak256": "0x7031c73b2e7be9225097f1c1060111f95ddda0658183cd986207e2c9848fbc3a",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://3adf2cd90c0f020f431b98fc897d66e5aa4fbb1574234200619ca5f75c1aa58c",
-				"dweb:/ipfs/QmS8aV1KyK225MwV8dbv5y8fbnMKWeZzzfqP2kmKvtCVKs"
+				"bzz-raw://68a5c4d56742b3357fd499284a54b79836be1b5d225e53c7f0a7fe641946e774",
+				"dweb:/ipfs/QmSBiDrTxs8LwGaKcdJuKHiWHxwg3h9mN7gJc8GFL8YAzd"
 			]
 		},
 		"contracts/FlowerStorage.sol": {
