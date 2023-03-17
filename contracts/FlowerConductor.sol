@@ -44,7 +44,7 @@ contract FlowerConductor is Ownable {
 
     // MODIFIER that limits to only contract owner or flower faucet can perform action
     modifier onlyOwnerOrFlowerFaucet() {
-        require(msg.sender == owner() || msg.sender == address(flowerFaucet), "Only owner or flower faucet can perform action");
+        require(msg.sender == address(flowerFaucet) || msg.sender == owner(), "Only owner or flower faucet can perform action");
         _;
     }
 
@@ -63,6 +63,11 @@ contract FlowerConductor is Ownable {
 
     function FlowerTotalBurned() external view returns (uint256) {
         return flowerStorage.totalBurned();
+    }
+
+    // Set flower faucet to new address
+    function setFlowerFaucet(address _addr) public onlyOwner {
+        flowerFaucet = FlowerFaucet(_addr);
     }
 
     // Get a set number/all nodes for an address in flowerStorage to know how many tokens are expiring at what time
@@ -116,7 +121,7 @@ contract FlowerConductor is Ownable {
     }
 
     // expire flower
-    function expireFlower(address addr) public onlyOwner {
+    function expireFlower(address addr) public onlyOwnerOrFlowerFaucet {
         uint256 currentIndex = flowerStorage.firstTBNode(addr);  
         TBNode memory currentNode = flowerStorage.getTBNodeByIndex(addr, currentIndex);
 

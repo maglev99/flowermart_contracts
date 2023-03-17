@@ -13,10 +13,13 @@ contract FlowerFaucet is Ownable {
     uint256 public claimableAmount = 1000000000000000000; // 1.00 where unit denominated in wei
 
     // the time faucet with reference for determining whether refresh 
-    uint256 public referenceTime;
+    // set as immutable since changing will make lastClaimedIndex invalid
+    uint256 public immutable referenceTime;
 
     // time interval when flowers can be claimed again
-    uint256 public refreshTime = 30;  // 30 sec for testing
+    // set as constant since changing will make lastClaimedIndex invalid
+    // redeploy new contract with different refresh time if it needs changing
+    uint256 public constant refreshTime = 30;  // 30 sec for testing
 
     // index that is the closest rounded down integer of (block.timestamp - referenceTime) / refreshTime
     // for determining whether flowers can be claimed again
@@ -33,11 +36,6 @@ contract FlowerFaucet is Ownable {
     // Events 
     event ClaimFlower(address indexed _addr, uint256 indexed timestamp, uint256 amount);
 
-    // set reference time for when flower will be refreshed
-    function setReferenceTime(uint256 _time) public onlyOwner {
-        referenceTime = _time;
-    }
-
     // set flower conductor
     function setFlowerConductor(address _addr) public onlyOwner {
         flowerConductor = FlowerConductor(_addr);
@@ -47,11 +45,6 @@ contract FlowerFaucet is Ownable {
     function setClaimableAmount(uint256 _amount) public onlyOwner {
         claimableAmount = _amount;
     } 
-
-    // set refresh time
-    function setRefreshTime(uint256 _time) public onlyOwner {
-        refreshTime = _time;
-    }
   
     // claim flower
     function claim(address _addr) public {
