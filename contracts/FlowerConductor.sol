@@ -1,6 +1,7 @@
 pragma solidity 0.8.4;  
 // SPDX-License-Identifier: MIT
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/Address.sol";
 import "./FlowerCoinStorage.sol";
 import "./FlowerStorage.sol";
 import "./FlowerFaucet.sol";
@@ -8,9 +9,14 @@ import "./TBNode.sol";
 
 // handles minting (for now) and transfer and sending expired flower tokens to burn address 
 contract FlowerConductor is Ownable {
-    FlowerStorage public flowerStorage;
-    FlowerCoinStorage public flowerCoinStorage;
-    FlowerFaucet public flowerFaucet;
+    using Address for address;
+
+    FlowerStorage public immutable flowerStorage;
+    FlowerCoinStorage public immutable flowerCoinStorage;
+    
+    // use private variable since doesn't need to call functions of this contract
+    address private flowerFaucet;
+    //FlowerFaucet public flowerFaucet;
 
     // time to expire when calling flower token actions
     uint256 public timeToExpire = 30;
@@ -28,7 +34,21 @@ contract FlowerConductor is Ownable {
     event BurnFlowerCoin(address indexed addr, uint256 indexed timestamp, uint256 amount);   
     event TransferFlowerCoin(address indexed from, address indexed to, uint256 amount);  
 
-    constructor(address flowerStorageAddress, address flowerCoinStorageAddress, address flowerFaucetAddress) {
+    // FlowerFaucet Events
+    event SetFlowerFaucet(address indexed flowerFaucetAddress);
+
+    // MODIFIER that limits to only contract owner or flower faucet can perform action
+    modifier onlyOwnerOrFlowerFaucet() {
+        require(msg.sender == flowerFaucet || msg.sender == owner(), "Only owner or flower faucet can perform action");
+        _;
+    }
+
+    constructor(address flowerStorageAddress, address flowerCoinStorageAddress) {
+        // Require FlowerStorage FlowerCoinStorage FlowerFaucet to be contract addresses
+        // Open Zepellin isContract function
+        require(flowerStorageAddress.isContract(), "must be instance of FlowerStorage contract");
+        require(flowerCoinStorageAddress.isContract(), "must be instance of FlowerCoinStorage contract");
+ 
         // Set the deployer as the initial owner
         transferOwnership(msg.sender);
 
@@ -37,15 +57,6 @@ contract FlowerConductor is Ownable {
 
         // set flowerCoinStorage address
         flowerCoinStorage = FlowerCoinStorage(flowerCoinStorageAddress);
-
-        // set flowerFaucet address
-        flowerFaucet = FlowerFaucet(flowerFaucetAddress);
-    }
-
-    // MODIFIER that limits to only contract owner or flower faucet can perform action
-    modifier onlyOwnerOrFlowerFaucet() {
-        require(msg.sender == address(flowerFaucet) || msg.sender == owner(), "Only owner or flower faucet can perform action");
-        _;
     }
 
     // VIEW functions for Flower
@@ -67,7 +78,11 @@ contract FlowerConductor is Ownable {
 
     // Set flower faucet to new address
     function setFlowerFaucet(address _addr) public onlyOwner {
-        flowerFaucet = FlowerFaucet(_addr);
+        require(_addr.isContract(), "must be instance of FlowerFaucet contract");
+        flowerFaucet = _addr;
+
+        // EVENT: emit set flower faucet event
+        emit SetFlowerFaucet(_addr);
     }
 
     // Get a set number/all nodes for an address in flowerStorage to know how many tokens are expiring at what time
@@ -96,28 +111,33 @@ contract FlowerConductor is Ownable {
         return nodes;
     }
 
+    // Not needed, call from flowerCoinstorage directly
     // view functions for FlowerCoin
-    function FlowerCoinTotalBalance(address addr) external view returns (uint256) {
-        return flowerCoinStorage.totalBalances(addr);
-    }
+    // function FlowerCoinTotalBalance(address addr) external view returns (uint256) {
+    //     return flowerCoinStorage.totalBalances(addr);
+    // }
 
-    function FlowerCoinTotalSupply() external view returns (uint256) {
-        return flowerCoinStorage.totalSupply();
-    }
+    // function FlowerCoinTotalSupply() external view returns (uint256) {
+    //     return flowerCoinStorage.totalSupply();
+    // }
 
-    function FlowerCoinTotalBurned() external view returns (uint256) {
-        return flowerCoinStorage.totalBurned();
-    }
+    // function FlowerCoinTotalBurned() external view returns (uint256) {
+    //     return flowerCoinStorage.totalBurned();
+    // }
 
     // set time that flower tokens will expire
     // affects all flower tokens in storage as time to expire passed into expiry function in flowerStorage
     function setTimeToExpire(uint256 time) public onlyOwner {
         timeToExpire = time;
+
+        // TODO add event to show time expire has changed
     }
 
     // set exchange rate for burning flower token and minting flower coin
         function setFlowersPerFlowerCoin(uint256 amount) public onlyOwner {
         flowersPerFlowerCoin = amount;
+
+        // TODO add event
     }
 
     // expire flower
@@ -150,6 +170,7 @@ contract FlowerConductor is Ownable {
             currentNode = flowerStorage.getTBNodeByIndex(addr, currentIndex);       
         }
 
+        // NOTE will save gas if have these functionality in a function in flower storage
         // update total balance in address to subract expired tokens 
         flowerStorage.subtractBalance(addr, totalTokensExpired);
 
@@ -170,6 +191,7 @@ contract FlowerConductor is Ownable {
 
         //set time added
         uint256 timeAdded = block.timestamp;
+        // Todo BATCH
         // add tokens and timestamp to linked list
         flowerStorage.addNode(addr, timeAdded, amount);
         // update total balance in address
@@ -199,6 +221,7 @@ contract FlowerConductor is Ownable {
         uint256 amountBurned = 0;
 
         // iterate through nodes until amount burned equals amount 
+        // INFO potentially costly for gas
         while (amountBurned < amount)
         {
             // get difference between amount and amount burned
@@ -236,6 +259,7 @@ contract FlowerConductor is Ownable {
             }
         }
 
+        // TODO Batch
         // update total balance in address to subract burned tokens 
         flowerStorage.subtractBalance(addr, amountBurned);
         // update total supply of tokens
@@ -248,7 +272,7 @@ contract FlowerConductor is Ownable {
     }
 
     // mint flower coins 
-    function mintFlowerCoin(address to, uint256 amount) public onlyOwner {
+    function mintFlowerCoin(address to, uint256 amount) private {
         flowerCoinStorage.mint(to, amount);
 
         // EVENT: emit mint flower coins event
@@ -256,7 +280,7 @@ contract FlowerConductor is Ownable {
     }
 
     // burn flower coins
-     function burnFlowerCoin(address addr, uint256 amount) public onlyOwner {
+     function burnFlowerCoin(address addr, uint256 amount) private {
         flowerCoinStorage.burn(addr, amount);
 
         // EVENT: burn mint flower coins event

@@ -30,6 +30,19 @@
 				"type": "event"
 			},
 			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "flowerConductorAddress",
+						"type": "address"
+					}
+				],
+				"name": "SetFlowerConductor",
+				"type": "event"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "address",
@@ -240,6 +253,19 @@
 					}
 				],
 				"name": "setFirstTBNode",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_addr",
+						"type": "address"
+					}
+				],
+				"name": "setFlowerConductor",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -493,6 +519,14 @@
 				"dweb:/ipfs/QmYqEbJML4jB1GHbzD4cUZDtJg5wVwNm3vDJq1GbyDus8y"
 			]
 		},
+		"@openzeppelin/contracts/utils/Address.sol": {
+			"keccak256": "0xf96f969e24029d43d0df89e59d365f277021dac62b48e1c1e3ebe0acdd7f1ca1",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://ec772b45a624be516f1c81970caa8a2e144301e9d0921cbc1a2789fef39a1269",
+				"dweb:/ipfs/QmNyjwxCrGhQMyzLD93oUobJXVe9ceJvRvfXwbEtuxPiEj"
+			]
+		},
 		"@openzeppelin/contracts/utils/Context.sol": {
 			"keccak256": "0xe2e337e6dde9ef6b680e07338c493ebea1b5fd09b43424112868e9cc1706bca7",
 			"license": "MIT",
@@ -502,11 +536,11 @@
 			]
 		},
 		"contracts/FlowerStorage.sol": {
-			"keccak256": "0x4d37f10419197407ed04d0d1c0cf46e60b38e9fb4ad24f1052a7b2c9a1bdfdc9",
+			"keccak256": "0xb44d4f506da82620fe082bf25271874fb81a7fb7de6eabeae81dd2c8cbaa98a7",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://6a46043883ea6e05d203ae322225ad2785cea0bd5160cc2a55bbdf1209d22a2f",
-				"dweb:/ipfs/QmRWABFAcSRQjUYFXbDfjcAopEygy7tnjLdhCHmD9teEvB"
+				"bzz-raw://4059d0118cb9a57de4842b3c2ff2c0ab5add92780df5461a3516a8b82e9d46c9",
+				"dweb:/ipfs/QmX2JgvBwySTNwgWjRJ6aamBP5wQLhExdnhc7sGfTVaWwB"
 			]
 		},
 		"contracts/TBNode.sol": {

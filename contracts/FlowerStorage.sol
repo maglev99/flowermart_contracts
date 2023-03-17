@@ -2,12 +2,23 @@ pragma solidity 0.8.4;
 // SPDX-License-Identifier: MIT
 import "./TBNode.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/Address.sol";
 
 // Stores flower token in different pools 
 contract FlowerStorage is Ownable {
+    using Address for address;
+
+    address private flowerConductor;
+
     constructor() {
         // Set the deployer as the initial owner
         transferOwnership(msg.sender);
+    }
+
+    // MODIFIER that limits to only flower conductor can perform action
+    modifier onlyFlowerConductor() {
+        require(msg.sender == flowerConductor, "Only flower conductor can perform action");
+        _;
     }
 
     // separate flower storage into just this total balance
@@ -29,49 +40,60 @@ contract FlowerStorage is Ownable {
     // stores actual nodes based on index
     mapping(address => mapping(uint256 => TBNode)) public tbNodeByIndex;
 
+    event SetFlowerConductor(address indexed flowerConductorAddress);
+
+    // set flower conductor
+    function setFlowerConductor(address _addr) public onlyOwner {
+        require(_addr.isContract(), "must be instance of FlowerCoinStorage contract");
+        flowerConductor = _addr;
+
+        // emit event
+        emit SetFlowerConductor(_addr);
+    }
+
     // SET totalBalances 
-    function addBalance(address _addr, uint256 _amount) external onlyOwner {
+    function addBalance(address _addr, uint256 _amount) external onlyFlowerConductor {
         totalBalances[_addr] += _amount;
     }
 
-    function subtractBalance(address _addr, uint256 _amount) external onlyOwner {
+    function subtractBalance(address _addr, uint256 _amount) external onlyFlowerConductor {
         totalBalances[_addr] -= _amount;
     }
 
     // SET totalSupply 
-    function addTotalSupply(uint256 _amount) external onlyOwner {
+    function addTotalSupply(uint256 _amount) external onlyFlowerConductor {
         totalSupply += _amount;
     }
 
-    function subtractTotalSupply(uint256 _amount) external onlyOwner {
+    function subtractTotalSupply(uint256 _amount) external onlyFlowerConductor {
         totalSupply -= _amount;
     }
 
     // SET totalExpired
-    function addTotalExpired(uint256 _amount) external onlyOwner {
+    function addTotalExpired(uint256 _amount) external onlyFlowerConductor {
         totalExpired += _amount;
     }
 
-    function subtractTotalExpired(uint256 _amount) external onlyOwner {
+    function subtractTotalExpired(uint256 _amount) external onlyFlowerConductor {
         totalExpired -= _amount;
     }
 
     // SET totalBurned
-    function addTotalBurned(uint256 _amount) external onlyOwner {
+    function addTotalBurned(uint256 _amount) external onlyFlowerConductor {
         totalBurned += _amount;
     }
 
-    function subtractTotalBurned(uint256 _amount) external onlyOwner {
+    function subtractTotalBurned(uint256 _amount) external onlyFlowerConductor {
         totalBurned -= _amount;
     }
 
     // SET firstTBNode
-    function setFirstTBNode(address _addr, uint256 _index) public onlyOwner {
+    function setFirstTBNode(address _addr, uint256 _index) public onlyFlowerConductor {
         firstTBNode[_addr] = _index;
     }
 
     // SET lastTBNode
-    function setLastTBNode(address _addr, uint256 _index) public onlyOwner {
+    function setLastTBNode(address _addr, uint256 _index) public onlyFlowerConductor {
         lastTBNode[_addr] = _index;
     }
 
@@ -81,17 +103,17 @@ contract FlowerStorage is Ownable {
     }
 
     // SET tbNodeByIndex
-    function subtractTBNodeByIndexBalance(address _addr, uint256 _index, uint256 _amount) external onlyOwner {
+    function subtractTBNodeByIndexBalance(address _addr, uint256 _index, uint256 _amount) external onlyFlowerConductor {
         tbNodeByIndex[_addr][_index].balance -= _amount;
     }
 
-    function removeTBNodeByIndex(address _addr, uint256 _index) external onlyOwner {
+    function removeTBNodeByIndex(address _addr, uint256 _index) external onlyFlowerConductor {
         // remove the node from the tbNodeByIndex mapping
         delete tbNodeByIndex[_addr][_index];      
     }
 
     // add a node to TBNode linked list when a user picks flowers
-    function addNode(address addr, uint256 timestamp, uint256 balance) public onlyOwner {
+    function addNode(address addr, uint256 timestamp, uint256 balance) public onlyFlowerConductor {
         // create a new TBNode
         TBNode memory newNode = TBNode({
             timestamp: timestamp,
