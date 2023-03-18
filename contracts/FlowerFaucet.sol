@@ -28,8 +28,6 @@ contract FlowerFaucet is Ownable {
     // for determining whether flowers can be claimed again
     mapping ( address => uint256 ) public lastClaimedIndex;
 
-    event SetFlowerConductor(address indexed flowerConductorAddress);
-
     constructor() {
         // Set the deployer as the initial owner
         transferOwnership(msg.sender);
@@ -40,10 +38,11 @@ contract FlowerFaucet is Ownable {
 
     // Events 
     event ClaimFlower(address indexed _addr, uint256 indexed timestamp, uint256 amount);
+    event SetFlowerConductor(address indexed flowerConductorAddress);
 
     // set flower conductor
     function setFlowerConductor(address _addr) public onlyOwner {
-        require(_addr.isContract(), "must be instance of FlowerCoinStorage contract");
+        require(_addr.isContract(), "address must be a contract");
         flowerConductor = FlowerConductor(_addr);
 
         // emit event

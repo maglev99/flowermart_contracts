@@ -16,7 +16,6 @@ contract FlowerConductor is Ownable {
     
     // use private variable since doesn't need to call functions of this contract
     address private flowerFaucet;
-    //FlowerFaucet public flowerFaucet;
 
     // time to expire when calling flower token actions
     uint256 public timeToExpire = 30;
@@ -46,8 +45,8 @@ contract FlowerConductor is Ownable {
     constructor(address flowerStorageAddress, address flowerCoinStorageAddress) {
         // Require FlowerStorage FlowerCoinStorage FlowerFaucet to be contract addresses
         // Open Zepellin isContract function
-        require(flowerStorageAddress.isContract(), "must be instance of FlowerStorage contract");
-        require(flowerCoinStorageAddress.isContract(), "must be instance of FlowerCoinStorage contract");
+        require(flowerStorageAddress.isContract(), "address must be a contract");
+        require(flowerCoinStorageAddress.isContract(), "address must be a contract");
  
         // Set the deployer as the initial owner
         transferOwnership(msg.sender);
@@ -78,7 +77,7 @@ contract FlowerConductor is Ownable {
 
     // Set flower faucet to new address
     function setFlowerFaucet(address _addr) public onlyOwner {
-        require(_addr.isContract(), "must be instance of FlowerFaucet contract");
+        require(_addr.isContract(), "address must be a contract");
         flowerFaucet = _addr;
 
         // EVENT: emit set flower faucet event
@@ -110,20 +109,6 @@ contract FlowerConductor is Ownable {
 
         return nodes;
     }
-
-    // Not needed, call from flowerCoinstorage directly
-    // view functions for FlowerCoin
-    // function FlowerCoinTotalBalance(address addr) external view returns (uint256) {
-    //     return flowerCoinStorage.totalBalances(addr);
-    // }
-
-    // function FlowerCoinTotalSupply() external view returns (uint256) {
-    //     return flowerCoinStorage.totalSupply();
-    // }
-
-    // function FlowerCoinTotalBurned() external view returns (uint256) {
-    //     return flowerCoinStorage.totalBurned();
-    // }
 
     // set time that flower tokens will expire
     // affects all flower tokens in storage as time to expire passed into expiry function in flowerStorage

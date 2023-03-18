@@ -1,8 +1,9 @@
 pragma solidity 0.8.4;  
 // SPDX-License-Identifier: MIT
-import "./TBNode.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
+
+import "./TBNode.sol";
 
 // Stores flower token in different pools 
 contract FlowerStorage is Ownable {
@@ -44,7 +45,7 @@ contract FlowerStorage is Ownable {
 
     // set flower conductor
     function setFlowerConductor(address _addr) public onlyOwner {
-        require(_addr.isContract(), "must be instance of FlowerCoinStorage contract");
+        require(_addr.isContract(), "address must be a contract");
         flowerConductor = _addr;
 
         // emit event
