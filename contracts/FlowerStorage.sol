@@ -142,4 +142,35 @@ contract FlowerStorage is Ownable {
             firstTBNode[addr] = newIndex;
         }
     }
+
+    // batch function that runs to update token balances on expire
+    function updateBalanceOnExpire(address _addr, uint256 _amount) public onlyFlowerConductor {
+        // update total balance in address to subtract expired tokens 
+        totalBalances[_addr] -= _amount;
+        // update total supply of tokens
+        totalSupply -= _amount;
+        // update total expired tokens
+        totalExpired += _amount;
+    }
+
+    // batch function that runs to update token balances on mint
+    function updateBalanceOnMint(address _addr, uint256 _timeAdded, uint256 _amount) public onlyFlowerConductor {
+        // add tokens and timestamp to linked list
+        addNode(_addr, _timeAdded, _amount);
+        // update total balance in address
+        totalBalances[_addr] += _amount;
+        // update total supply of tokens
+        totalSupply += _amount;
+    }
+
+    // batch function that runs to update token balances on burn
+    function updateBalanceOnBurn(address _addr, uint256 _amount) public onlyFlowerConductor {
+        // update total balance in address to subract burned tokens 
+        totalBalances[_addr] -= _amount;
+        // update total supply of tokens
+        totalSupply -= _amount;
+        // update total burned tokens
+        totalBurned += _amount;    
+    }
+
 }

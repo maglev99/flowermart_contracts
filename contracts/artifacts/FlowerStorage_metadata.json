@@ -472,6 +472,65 @@
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_addr",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_amount",
+						"type": "uint256"
+					}
+				],
+				"name": "updateBalanceOnBurn",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_addr",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_amount",
+						"type": "uint256"
+					}
+				],
+				"name": "updateBalanceOnExpire",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_addr",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_timeAdded",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_amount",
+						"type": "uint256"
+					}
+				],
+				"name": "updateBalanceOnMint",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
 			}
 		],
 		"devdoc": {
@@ -536,11 +595,11 @@
 			]
 		},
 		"contracts/FlowerStorage.sol": {
-			"keccak256": "0xf63dd2a09223cdb63f38ab6db24e39ae286c891b2750d8e19e6a008356606571",
+			"keccak256": "0x4e04fd4d86ec08ba419003f14e38ad18be33192a604b3d3575c7e42f996b8262",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://d70089923c82bab91f3999c8fc68fee6ebf2518bdaca2d234d24af36dbaae1dc",
-				"dweb:/ipfs/QmXzzXkNTeUJCjZCVTM4Vc93s1UeX8JXkSKUJqyYiz8u77"
+				"bzz-raw://020c1c11a8ff98a87e9bff64e45831e88ecde54068fbb28fcfad568f8ed8ce3e",
+				"dweb:/ipfs/QmdpsgrHbeNYdVecUZEbmWWxXZvef4JK3am4wMC3t3nrbE"
 			]
 		},
 		"contracts/TBNode.sol": {

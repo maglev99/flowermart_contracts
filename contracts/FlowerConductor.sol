@@ -155,15 +155,8 @@ contract FlowerConductor is Ownable {
             currentNode = flowerStorage.getTBNodeByIndex(addr, currentIndex);       
         }
 
-        // NOTE will save gas if have these functionality in a function in flower storage
-        // update total balance in address to subract expired tokens 
-        flowerStorage.subtractBalance(addr, totalTokensExpired);
-
-        // update total supply of tokens
-        flowerStorage.subtractTotalSupply(totalTokensExpired);
-
-        // update total expired tokens
-        flowerStorage.addTotalExpired(totalTokensExpired);
+        // update balances of flower storage on expire
+        flowerStorage.updateBalanceOnExpire(addr, totalTokensExpired);
 
         // EVENT: emit expire flower event
         emit ExpireFlower(addr, block.timestamp, totalTokensExpired);
@@ -176,13 +169,9 @@ contract FlowerConductor is Ownable {
 
         //set time added
         uint256 timeAdded = block.timestamp;
-        // Todo BATCH
-        // add tokens and timestamp to linked list
-        flowerStorage.addNode(addr, timeAdded, amount);
-        // update total balance in address
-        flowerStorage.addBalance(addr, amount);
-        // update total supply of tokens
-        flowerStorage.addTotalSupply(amount);
+
+        // update balances of flower storage on mint
+        flowerStorage.updateBalanceOnMint(addr, timeAdded, amount);
 
         // EVENT: emit mint flower event
         emit MintFlower(addr, timeAdded, amount);
@@ -244,13 +233,8 @@ contract FlowerConductor is Ownable {
             }
         }
 
-        // TODO Batch
-        // update total balance in address to subract burned tokens 
-        flowerStorage.subtractBalance(addr, amountBurned);
-        // update total supply of tokens
-        flowerStorage.subtractTotalSupply(amountBurned);
-        // update total burned tokens
-        flowerStorage.addTotalBurned(amountBurned);
+        // update balances of flower storage on burn
+        flowerStorage.updateBalanceOnBurn(addr, amountBurned);      
 
         // EVENT: emit burn flower event
         emit BurnFlower(addr, block.timestamp, amountBurned);
