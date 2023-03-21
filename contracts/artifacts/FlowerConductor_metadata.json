@@ -171,6 +171,57 @@
 					{
 						"indexed": true,
 						"internalType": "address",
+						"name": "flowerFaucetAddress",
+						"type": "address"
+					}
+				],
+				"name": "SetFlowerFaucet",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "timestamp",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "SetFlowersPerFlowerCoin",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "timestamp",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "newTimeToExpire",
+						"type": "uint256"
+					}
+				],
+				"name": "SetTimeToExpire",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
 						"name": "from",
 						"type": "address"
 					},
@@ -189,51 +240,6 @@
 				],
 				"name": "TransferFlowerCoin",
 				"type": "event"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "addr",
-						"type": "address"
-					}
-				],
-				"name": "FlowerCoinTotalBalance",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "FlowerCoinTotalBurned",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "FlowerCoinTotalSupply",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
 			},
 			{
 				"inputs": [
@@ -307,24 +313,6 @@
 					}
 				],
 				"name": "burnFlower",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "addr",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "amount",
-						"type": "uint256"
-					}
-				],
-				"name": "burnFlowerCoin",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -453,24 +441,6 @@
 						"type": "uint256"
 					}
 				],
-				"name": "mintFlowerCoin",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "to",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "amount",
-						"type": "uint256"
-					}
-				],
 				"name": "mintFlowerCoinWithFlower",
 				"outputs": [],
 				"stateMutability": "nonpayable",
@@ -492,6 +462,19 @@
 			{
 				"inputs": [],
 				"name": "renounceOwnership",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_addr",
+						"type": "address"
+					}
+				],
+				"name": "setFlowerFaucet",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -635,6 +618,14 @@
 				"dweb:/ipfs/QmYqEbJML4jB1GHbzD4cUZDtJg5wVwNm3vDJq1GbyDus8y"
 			]
 		},
+		"@openzeppelin/contracts/utils/Address.sol": {
+			"keccak256": "0xf96f969e24029d43d0df89e59d365f277021dac62b48e1c1e3ebe0acdd7f1ca1",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://ec772b45a624be516f1c81970caa8a2e144301e9d0921cbc1a2789fef39a1269",
+				"dweb:/ipfs/QmNyjwxCrGhQMyzLD93oUobJXVe9ceJvRvfXwbEtuxPiEj"
+			]
+		},
 		"@openzeppelin/contracts/utils/Context.sol": {
 			"keccak256": "0xe2e337e6dde9ef6b680e07338c493ebea1b5fd09b43424112868e9cc1706bca7",
 			"license": "MIT",
@@ -644,27 +635,35 @@
 			]
 		},
 		"contracts/FlowerCoinStorage.sol": {
-			"keccak256": "0x9c6b8033a7b9bed388fbfd9da438a70f104ab0b0cc400ca67d49e963b1b63157",
+			"keccak256": "0x224afcfb1b09341a827af1ab1a12a0feda3ad3a77c0cf61fb4ae97e054b12a38",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://a54a3604879467d6d018c381bfe4796f9f7dbb6baa52f457dd78848ab51e6065",
-				"dweb:/ipfs/QmcMWEZwWnZGKRfX7DaoHawC2PZCTWtswZhDv4aPsVHdfB"
+				"bzz-raw://4cc74e3a5923501de9e3dee601e97ba832b3d4255e42b90f7ef172ccdb0f4f88",
+				"dweb:/ipfs/QmU4EKP7jSGjmeeTWE4QRhFUoesH1p4ed5ovGbtJm51UGg"
 			]
 		},
 		"contracts/FlowerConductor.sol": {
-			"keccak256": "0x3566a072680c978828cdc1947bb79498119db0464a17874e850830be9a9a93f2",
+			"keccak256": "0x14d35d6747bc2c40933570467f95df1ff2e78aed45e96d2cf75180c4ba5b71f8",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://f9875347c6dd243004545cc0498e01c879929ca4ebb7f3609e96c0be5b57799f",
-				"dweb:/ipfs/QmakbCfUpJZbbxhN9169Zct5F4XqVn2CSbZa84Py5nvASd"
+				"bzz-raw://c931dee2d64431552c58117a371b8ec80f7bdbdeef8125731e19ac0a3aa0405a",
+				"dweb:/ipfs/QmVJDtDT6rSqTZ9s6EphGWexZL9zBamTynHSwy6ME84xv8"
+			]
+		},
+		"contracts/FlowerFaucet.sol": {
+			"keccak256": "0xb96e94eb794e16bf4b3eb75ba92a411d740b9a4a6b2a43bea66866ae362b0e7a",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://010b60c83166692143a50e601fde654e86ff8172b671635cc896ceb89868b0c8",
+				"dweb:/ipfs/QmavyqtDPjU5w9CTq4WAun2CB1Cu11NJ4VVxb2CJdjUZkh"
 			]
 		},
 		"contracts/FlowerStorage.sol": {
-			"keccak256": "0x4d37f10419197407ed04d0d1c0cf46e60b38e9fb4ad24f1052a7b2c9a1bdfdc9",
+			"keccak256": "0x4e04fd4d86ec08ba419003f14e38ad18be33192a604b3d3575c7e42f996b8262",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://6a46043883ea6e05d203ae322225ad2785cea0bd5160cc2a55bbdf1209d22a2f",
-				"dweb:/ipfs/QmRWABFAcSRQjUYFXbDfjcAopEygy7tnjLdhCHmD9teEvB"
+				"bzz-raw://020c1c11a8ff98a87e9bff64e45831e88ecde54068fbb28fcfad568f8ed8ce3e",
+				"dweb:/ipfs/QmdpsgrHbeNYdVecUZEbmWWxXZvef4JK3am4wMC3t3nrbE"
 			]
 		},
 		"contracts/TBNode.sol": {

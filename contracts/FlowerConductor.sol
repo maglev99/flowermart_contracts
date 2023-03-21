@@ -28,6 +28,8 @@ contract FlowerConductor is Ownable {
     event ExpireFlower(address indexed addr, uint256 indexed timestamp, uint256 amount);
     event BurnFlower(address indexed addr, uint256 indexed timestamp, uint256 amount);
 
+    event SetTimeToExpire(uint256 indexed timestamp, uint256 newTimeToExpire);
+
     // FlowerCoin Events
     event MintFlowerCoin(address indexed from, address indexed to, uint256 amount); // use from and to address here since mint happens when there is a transfer and knowing sender/receiver address more useful 
     event BurnFlowerCoin(address indexed addr, uint256 indexed timestamp, uint256 amount);   
@@ -35,6 +37,9 @@ contract FlowerConductor is Ownable {
 
     // FlowerFaucet Events
     event SetFlowerFaucet(address indexed flowerFaucetAddress);
+
+    // FlowerConductor Events
+    event SetFlowersPerFlowerCoin(uint256 indexed timestamp, uint256 amount);
 
     // MODIFIER that limits to only contract owner or flower faucet can perform action
     modifier onlyOwnerOrFlowerFaucet() {
@@ -115,14 +120,16 @@ contract FlowerConductor is Ownable {
     function setTimeToExpire(uint256 time) public onlyOwner {
         timeToExpire = time;
 
-        // TODO add event to show time expire has changed
+        // emit event to show time to expire has changed
+        emit SetTimeToExpire(block.timestamp, time);
     }
 
     // set exchange rate for burning flower token and minting flower coin
-        function setFlowersPerFlowerCoin(uint256 amount) public onlyOwner {
+    function setFlowersPerFlowerCoin(uint256 amount) public onlyOwner {
         flowersPerFlowerCoin = amount;
 
-        // TODO add event
+        // emit event when set new exchange rate
+        emit SetFlowersPerFlowerCoin(block.timestamp, amount);
     }
 
     // expire flower
