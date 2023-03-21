@@ -2,13 +2,14 @@ pragma solidity 0.8.4;
 // SPDX-License-Identifier: MIT
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 import "./FlowerConductor.sol";
 
 // Contract enables a set amount of flowers for each address to claim in a 24 hour window
 // ** May need to schedule deployment as close to 00:00 UTC as possible so that easy to know when the claim window is refreshed
 
-contract FlowerFaucet is Ownable {
+contract FlowerFaucet is Ownable, ReentrancyGuard {
     using Address for address;
     FlowerConductor public flowerConductor;
 
@@ -55,7 +56,7 @@ contract FlowerFaucet is Ownable {
     } 
   
     // claim flower
-    function claim(address _addr) public {
+    function claim(address _addr) public nonReentrant {
         // get last claimed index to determine if address can claim flower at this time
         uint256 claimedIndex = lastClaimedIndex[_addr];
         uint256 currentIndex = (block.timestamp - referenceTime) / refreshTime;
