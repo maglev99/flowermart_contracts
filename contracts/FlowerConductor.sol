@@ -2,13 +2,14 @@ pragma solidity 0.8.4;
 // SPDX-License-Identifier: MIT
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "./FlowerCoinStorage.sol";
 import "./FlowerStorage.sol";
 import "./FlowerFaucet.sol";
 import "./TBNode.sol";
 
 // handles minting (for now) and transfer and sending expired flower tokens to burn address 
-contract FlowerConductor is Ownable {
+contract FlowerConductor is Ownable, ReentrancyGuard {
     using Address for address;
 
     FlowerStorage public immutable flowerStorage;
@@ -264,7 +265,7 @@ contract FlowerConductor is Ownable {
     }
 
     // mint flower coins by burning flower tokens
-    function mintFlowerCoinWithFlower(address to, uint256 amount) public {
+    function mintFlowerCoinWithFlower(address to, uint256 amount) public nonReentrant {
         // burn flower tokens in from address 
         burnFlower(msg.sender, amount * flowersPerFlowerCoin);
         // mint flowerCoins to address
@@ -272,7 +273,7 @@ contract FlowerConductor is Ownable {
     }
 
     // transfer flower coins 
-    function transferFlowerCoin(address to, uint256 amount) public {
+    function transferFlowerCoin(address to, uint256 amount) public nonReentrant {
         flowerCoinStorage.transfer(msg.sender, to, amount);
 
         // EVENT: emit transfer flower coin event
@@ -280,9 +281,14 @@ contract FlowerConductor is Ownable {
     }
 
     // transfer both flower and flowercoins at once 
-    function transfer(address to, uint256 flowerAmount, uint256 flowerCoinAmount) public {
+    function transfer(address to, uint256 flowerAmount, uint256 flowerCoinAmount) public nonReentrant {
+        // transfer flowercoins that are minted using sender's flower balance
         mintFlowerCoinWithFlower(to, flowerAmount);
 
-        transferFlowerCoin(to, flowerCoinAmount);
+        // transfer flowercoins from sender's flowercoin balance
+        flowerCoinStorage.transfer(msg.sender, to, flowerCoinAmount);
+
+        // EVENT: emit transfer flower coin event
+        emit TransferFlowerCoin(msg.sender, to, flowerCoinAmount);
     }
 }

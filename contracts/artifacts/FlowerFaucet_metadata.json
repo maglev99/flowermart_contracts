@@ -289,11 +289,11 @@
 			]
 		},
 		"contracts/FlowerConductor.sol": {
-			"keccak256": "0x14d35d6747bc2c40933570467f95df1ff2e78aed45e96d2cf75180c4ba5b71f8",
+			"keccak256": "0x3031395b1f6fb2db807870227c15de3672711be5f1fa65e3c53c44bc8a12522e",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://c931dee2d64431552c58117a371b8ec80f7bdbdeef8125731e19ac0a3aa0405a",
-				"dweb:/ipfs/QmVJDtDT6rSqTZ9s6EphGWexZL9zBamTynHSwy6ME84xv8"
+				"bzz-raw://f63bbebf7462ab01d5ede0539d744ec59256caef2566a7e30597a10d11d1bdac",
+				"dweb:/ipfs/QmYdWdiHKwq6xkF1S6JCtarGv3xRKSk28CbCxq9xy2gAWE"
 			]
 		},
 		"contracts/FlowerFaucet.sol": {
