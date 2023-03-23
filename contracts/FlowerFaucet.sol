@@ -38,8 +38,8 @@ contract FlowerFaucet is Ownable, ReentrancyGuard {
     }
 
     // Events 
-    event ClaimFlower(address indexed _addr, uint256 indexed timestamp, uint256 amount);
-    event SetFlowerConductor(address indexed flowerConductorAddress);
+    event ClaimFlower(address indexed _addr, uint256 indexed _timestamp, uint256 _amount);
+    event SetFlowerConductor(address indexed _flowerConductorAddress);
 
     // set flower conductor
     function setFlowerConductor(address _addr) public onlyOwner {

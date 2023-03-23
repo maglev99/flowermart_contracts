@@ -25,22 +25,22 @@ contract FlowerConductor is Ownable, ReentrancyGuard {
     uint256 public flowersPerFlowerCoin = 1;
 
     // Flower Events 
-    event MintFlower(address indexed addr, uint256 indexed timestamp, uint256 amount);
-    event ExpireFlower(address indexed addr, uint256 indexed timestamp, uint256 amount);
-    event BurnFlower(address indexed addr, uint256 indexed timestamp, uint256 amount);
+    event MintFlower(address indexed _addr, uint256 indexed _timestamp, uint256 _amount);
+    event ExpireFlower(address indexed _addr, uint256 indexed _timestamp, uint256 _amount);
+    event BurnFlower(address indexed _addr, uint256 indexed _timestamp, uint256 _amount);
 
-    event SetTimeToExpire(uint256 indexed timestamp, uint256 newTimeToExpire);
+    event SetTimeToExpire(uint256 indexed _timestamp, uint256 _newTimeToExpire);
 
     // FlowerCoin Events
-    event MintFlowerCoin(address indexed from, address indexed to, uint256 amount); // use from and to address here since mint happens when there is a transfer and knowing sender/receiver address more useful 
-    event BurnFlowerCoin(address indexed addr, uint256 indexed timestamp, uint256 amount);   
-    event TransferFlowerCoin(address indexed from, address indexed to, uint256 amount);  
+    event MintFlowerCoin(address indexed _from, address indexed _to, uint256 _amount); // use from and to address here since mint happens when there is a transfer and knowing sender/receiver address more useful 
+    event BurnFlowerCoin(address indexed _addr, uint256 indexed _timestamp, uint256 _amount);   
+    event TransferFlowerCoin(address indexed _from, address indexed _to, uint256 _amount);  
 
     // FlowerFaucet Events
-    event SetFlowerFaucet(address indexed flowerFaucetAddress);
+    event SetFlowerFaucet(address indexed _flowerFaucetAddress);
 
     // FlowerConductor Events
-    event SetFlowersPerFlowerCoin(uint256 indexed timestamp, uint256 amount);
+    event SetFlowersPerFlowerCoin(uint256 indexed _timestamp, uint256 _amount);
 
     // MODIFIER that limits to only contract owner or flower faucet can perform action
     modifier onlyOwnerOrFlowerFaucet() {
@@ -48,25 +48,25 @@ contract FlowerConductor is Ownable, ReentrancyGuard {
         _;
     }
 
-    constructor(address flowerStorageAddress, address flowerCoinStorageAddress) {
+    constructor(address _flowerStorageAddress, address _flowerCoinStorageAddress) {
         // Require FlowerStorage FlowerCoinStorage FlowerFaucet to be contract addresses
         // Open Zepellin isContract function
-        require(flowerStorageAddress.isContract(), "address must be a contract");
-        require(flowerCoinStorageAddress.isContract(), "address must be a contract");
+        require(_flowerStorageAddress.isContract(), "address must be a contract");
+        require(_flowerCoinStorageAddress.isContract(), "address must be a contract");
  
         // Set the deployer as the initial owner
         transferOwnership(msg.sender);
 
         // set flowerStorage address
-        flowerStorage = FlowerStorage(flowerStorageAddress);
+        flowerStorage = FlowerStorage(_flowerStorageAddress);
 
         // set flowerCoinStorage address
-        flowerCoinStorage = FlowerCoinStorage(flowerCoinStorageAddress);
+        flowerCoinStorage = FlowerCoinStorage(_flowerCoinStorageAddress);
     }
 
     // VIEW functions for Flower
-    function FlowerTotalBalance(address addr) external view returns (uint256) {
-        return flowerStorage.totalBalances(addr);
+    function FlowerTotalBalance(address _addr) external view returns (uint256) {
+        return flowerStorage.totalBalances(_addr);
     }
 
     function FlowerTotalSupply() external view returns (uint256) {
@@ -118,25 +118,25 @@ contract FlowerConductor is Ownable, ReentrancyGuard {
 
     // set time that flower tokens will expire
     // affects all flower tokens in storage as time to expire passed into expiry function in flowerStorage
-    function setTimeToExpire(uint256 time) public onlyOwner {
-        timeToExpire = time;
+    function setTimeToExpire(uint256 _time) public onlyOwner {
+        timeToExpire = _time;
 
         // emit event to show time to expire has changed
-        emit SetTimeToExpire(block.timestamp, time);
+        emit SetTimeToExpire(block.timestamp, _time);
     }
 
     // set exchange rate for burning flower token and minting flower coin
-    function setFlowersPerFlowerCoin(uint256 amount) public onlyOwner {
-        flowersPerFlowerCoin = amount;
+    function setFlowersPerFlowerCoin(uint256 _amount) public onlyOwner {
+        flowersPerFlowerCoin = _amount;
 
         // emit event when set new exchange rate
-        emit SetFlowersPerFlowerCoin(block.timestamp, amount);
+        emit SetFlowersPerFlowerCoin(block.timestamp, _amount);
     }
 
     // expire flower
-    function expireFlower(address addr) public onlyOwnerOrFlowerFaucet {
-        uint256 currentIndex = flowerStorage.firstTBNode(addr);  
-        TBNode memory currentNode = flowerStorage.getTBNodeByIndex(addr, currentIndex);
+    function expireFlower(address _addr) public onlyOwnerOrFlowerFaucet {
+        uint256 currentIndex = flowerStorage.firstTBNode(_addr);  
+        TBNode memory currentNode = flowerStorage.getTBNodeByIndex(_addr, currentIndex);
 
         // stores amount of tokens expired to be removed from address total balance at the end
         uint256 totalTokensExpired = 0;
@@ -145,69 +145,69 @@ contract FlowerConductor is Ownable, ReentrancyGuard {
         while (currentIndex != 0 && currentNode.timestamp + timeToExpire <= block.timestamp)
         {
             // set firstTBNode to next node
-            flowerStorage.setFirstTBNode(addr, currentNode.next);
+            flowerStorage.setFirstTBNode(_addr, currentNode.next);
             // if node is the only node availble set lastTBNode to next node (which is 0)
-            if (flowerStorage.lastTBNode(addr) == currentIndex)
+            if (flowerStorage.lastTBNode(_addr) == currentIndex)
             {
-                flowerStorage.setLastTBNode(addr, currentNode.next);
+                flowerStorage.setLastTBNode(_addr, currentNode.next);
             }
 
             // add add node balance to total tokens that have expired
             totalTokensExpired += currentNode.balance;
             
             // remove the node from the tbNodeByIndex mapping
-            flowerStorage.removeTBNodeByIndex(addr, currentIndex);
+            flowerStorage.removeTBNodeByIndex(_addr, currentIndex);
 
             // set current index to next node
             currentIndex = currentNode.next;
-            currentNode = flowerStorage.getTBNodeByIndex(addr, currentIndex);       
+            currentNode = flowerStorage.getTBNodeByIndex(_addr, currentIndex);       
         }
 
         // update balances of flower storage on expire
-        flowerStorage.updateBalanceOnExpire(addr, totalTokensExpired);
+        flowerStorage.updateBalanceOnExpire(_addr, totalTokensExpired);
 
         // EVENT: emit expire flower event
-        emit ExpireFlower(addr, block.timestamp, totalTokensExpired);
+        emit ExpireFlower(_addr, block.timestamp, totalTokensExpired);
     }
 
     // mint flower 
-    function mintFlower(address addr, uint256 amount) public onlyOwnerOrFlowerFaucet {
+    function mintFlower(address _addr, uint256 _amount) public onlyOwnerOrFlowerFaucet {
         // remove expired tokens before adding new ones
-        expireFlower(addr);
+        expireFlower(_addr);
 
         //set time added
         uint256 timeAdded = block.timestamp;
 
         // update balances of flower storage on mint
-        flowerStorage.updateBalanceOnMint(addr, timeAdded, amount);
+        flowerStorage.updateBalanceOnMint(_addr, timeAdded, _amount);
 
         // EVENT: emit mint flower event
-        emit MintFlower(addr, timeAdded, amount);
+        emit MintFlower(_addr, timeAdded, _amount);
     }
 
     // burn flower
     // iterate through mapping starting from first node to remove flower tokens 
-    function burnFlower(address addr, uint256 amount) public onlyOwner {
+    function burnFlower(address _addr, uint256 _amount) public onlyOwner {
         // remove expired tokens first
         // NOTE: tokens not actually removed if require statement below fails since whole transaction reverts
-        expireFlower(addr);
+        expireFlower(_addr);
 
         // require amount remaining after removing expired tokens to be enough to burn
-        require(flowerStorage.totalBalances(addr) >= amount, "Not enough tokens to burn");
+        require(flowerStorage.totalBalances(_addr) >= _amount, "Not enough tokens to burn");
 
         // get current index and node to iterate
-        uint256 currentIndex =  flowerStorage.firstTBNode(addr);
-        TBNode memory currentNode = flowerStorage.getTBNodeByIndex(addr, currentIndex);
+        uint256 currentIndex =  flowerStorage.firstTBNode(_addr);
+        TBNode memory currentNode = flowerStorage.getTBNodeByIndex(_addr, currentIndex);
 
         // create temp variable for counting number of tokens that have been burned by node
         uint256 amountBurned = 0;
 
         // iterate through nodes until amount burned equals amount 
         // INFO potentially costly for gas
-        while (amountBurned < amount)
+        while (amountBurned < _amount)
         {
             // get difference between amount and amount burned
-            uint256 diff = amount - amountBurned;
+            uint256 diff = _amount - amountBurned;
 
             // empty and remove current node if it contains tokens less than or equal to amount
             if (diff >= currentNode.balance)
@@ -216,19 +216,19 @@ contract FlowerConductor is Ownable, ReentrancyGuard {
                 amountBurned += currentNode.balance;
 
                 // remove the node from the tbNodeByIndex mapping
-                flowerStorage.removeTBNodeByIndex(addr, currentIndex);
+                flowerStorage.removeTBNodeByIndex(_addr, currentIndex);
 
                 // set firstTBNode to next node
-                flowerStorage.setFirstTBNode(addr, currentNode.next);
+                flowerStorage.setFirstTBNode(_addr, currentNode.next);
                 // if node is the only node availble set lastTBNode to next node (which is 0)
-                if (flowerStorage.lastTBNode(addr) == currentIndex)
+                if (flowerStorage.lastTBNode(_addr) == currentIndex)
                 {
-                    flowerStorage.setLastTBNode(addr, currentNode.next);
+                    flowerStorage.setLastTBNode(_addr, currentNode.next);
                 }
 
                 // set current index to next node
                 currentIndex = currentNode.next;
-                currentNode = flowerStorage.getTBNodeByIndex(addr, currentIndex);
+                currentNode = flowerStorage.getTBNodeByIndex(_addr, currentIndex);
             }
 
             // if difference in balance less than node balance subtract difference from balance 
@@ -237,58 +237,58 @@ contract FlowerConductor is Ownable, ReentrancyGuard {
                 // update the amount burned
                 amountBurned += diff;
                 // update the balance of the node to subtract
-                flowerStorage.subtractTBNodeByIndexBalance(addr, currentIndex, diff);
+                flowerStorage.subtractTBNodeByIndexBalance(_addr, currentIndex, diff);
             }
         }
 
         // update balances of flower storage on burn
-        flowerStorage.updateBalanceOnBurn(addr, amountBurned);      
+        flowerStorage.updateBalanceOnBurn(_addr, amountBurned);      
 
         // EVENT: emit burn flower event
-        emit BurnFlower(addr, block.timestamp, amountBurned);
+        emit BurnFlower(_addr, block.timestamp, amountBurned);
     }
 
     // mint flower coins 
-    function mintFlowerCoin(address to, uint256 amount) private {
-        flowerCoinStorage.mint(to, amount);
+    function mintFlowerCoin(address _to, uint256 _amount) private {
+        flowerCoinStorage.mint(_to, _amount);
 
         // EVENT: emit mint flower coins event
-        emit MintFlowerCoin(msg.sender, to, amount);
+        emit MintFlowerCoin(msg.sender, _to, _amount);
     }
 
     // burn flower coins
-     function burnFlowerCoin(address addr, uint256 amount) private {
-        flowerCoinStorage.burn(addr, amount);
+     function burnFlowerCoin(address _addr, uint256 _amount) private {
+        flowerCoinStorage.burn(_addr, _amount);
 
         // EVENT: burn mint flower coins event
-        emit BurnFlowerCoin(addr, block.timestamp, amount);
+        emit BurnFlowerCoin(_addr, block.timestamp, _amount);
     }
 
     // mint flower coins by burning flower tokens
-    function mintFlowerCoinWithFlower(address to, uint256 amount) public nonReentrant {
+    function mintFlowerCoinWithFlower(address _to, uint256 _amount) public nonReentrant {
         // burn flower tokens in from address 
-        burnFlower(msg.sender, amount * flowersPerFlowerCoin);
+        burnFlower(msg.sender, _amount * flowersPerFlowerCoin);
         // mint flowerCoins to address
-        mintFlowerCoin(to, amount);
+        mintFlowerCoin(_to, _amount);
     }
 
     // transfer flower coins 
-    function transferFlowerCoin(address to, uint256 amount) public nonReentrant {
-        flowerCoinStorage.transfer(msg.sender, to, amount);
+    function transferFlowerCoin(address _to, uint256 _amount) public nonReentrant {
+        flowerCoinStorage.transfer(msg.sender, _to, _amount);
 
         // EVENT: emit transfer flower coin event
-        emit TransferFlowerCoin(msg.sender, to, amount);
+        emit TransferFlowerCoin(msg.sender, _to, _amount);
     }
 
     // transfer both flower and flowercoins at once 
-    function transfer(address to, uint256 flowerAmount, uint256 flowerCoinAmount) public nonReentrant {
+    function transfer(address _to, uint256 _flowerAmount, uint256 _flowerCoinAmount) public nonReentrant {
         // transfer flowercoins that are minted using sender's flower balance
-        mintFlowerCoinWithFlower(to, flowerAmount);
+        mintFlowerCoinWithFlower(_to, _flowerAmount);
 
         // transfer flowercoins from sender's flowercoin balance
-        flowerCoinStorage.transfer(msg.sender, to, flowerCoinAmount);
+        flowerCoinStorage.transfer(msg.sender, _to, _flowerCoinAmount);
 
         // EVENT: emit transfer flower coin event
-        emit TransferFlowerCoin(msg.sender, to, flowerCoinAmount);
+        emit TransferFlowerCoin(msg.sender, _to, _flowerCoinAmount);
     }
 }

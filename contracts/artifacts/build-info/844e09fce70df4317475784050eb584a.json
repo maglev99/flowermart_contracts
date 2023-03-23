@@ -1,0 +1,164 @@
+{
+	"id": "844e09fce70df4317475784050eb584a",
+	"_format": "hh-sol-build-info-1",
+	"solcVersion": "0.8.4",
+	"solcLongVersion": "0.8.4+commit.c7e474f2",
+	"input": {
+		"language": "Solidity",
+		"sources": {
+			"contracts/TBNode.sol": {
+				"content": "pragma solidity 0.8.4;  \n// SPDX-License-Identifier: MIT\n\nstruct TBNode {\n    uint256 timestamp;\n    uint256 balance;\n    uint256 next;\n}"
+			}
+		},
+		"settings": {
+			"optimizer": {
+				"enabled": false,
+				"runs": 200
+			},
+			"outputSelection": {
+				"*": {
+					"": [
+						"ast"
+					],
+					"*": [
+						"abi",
+						"metadata",
+						"devdoc",
+						"userdoc",
+						"storageLayout",
+						"evm.legacyAssembly",
+						"evm.bytecode",
+						"evm.deployedBytecode",
+						"evm.methodIdentifiers",
+						"evm.gasEstimates",
+						"evm.assembly"
+					]
+				}
+			}
+		}
+	},
+	"output": {
+		"sources": {
+			"contracts/TBNode.sol": {
+				"ast": {
+					"absolutePath": "contracts/TBNode.sol",
+					"exportedSymbols": {
+						"TBNode": [
+							8
+						]
+					},
+					"id": 9,
+					"license": "MIT",
+					"nodeType": "SourceUnit",
+					"nodes": [
+						{
+							"id": 1,
+							"literals": [
+								"solidity",
+								"0.8",
+								".4"
+							],
+							"nodeType": "PragmaDirective",
+							"src": "0:22:0"
+						},
+						{
+							"canonicalName": "TBNode",
+							"id": 8,
+							"members": [
+								{
+									"constant": false,
+									"id": 3,
+									"mutability": "mutable",
+									"name": "timestamp",
+									"nameLocation": "86:9:0",
+									"nodeType": "VariableDeclaration",
+									"scope": 8,
+									"src": "78:17:0",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_uint256",
+										"typeString": "uint256"
+									},
+									"typeName": {
+										"id": 2,
+										"name": "uint256",
+										"nodeType": "ElementaryTypeName",
+										"src": "78:7:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										}
+									},
+									"visibility": "internal"
+								},
+								{
+									"constant": false,
+									"id": 5,
+									"mutability": "mutable",
+									"name": "balance",
+									"nameLocation": "109:7:0",
+									"nodeType": "VariableDeclaration",
+									"scope": 8,
+									"src": "101:15:0",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_uint256",
+										"typeString": "uint256"
+									},
+									"typeName": {
+										"id": 4,
+										"name": "uint256",
+										"nodeType": "ElementaryTypeName",
+										"src": "101:7:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										}
+									},
+									"visibility": "internal"
+								},
+								{
+									"constant": false,
+									"id": 7,
+									"mutability": "mutable",
+									"name": "next",
+									"nameLocation": "130:4:0",
+									"nodeType": "VariableDeclaration",
+									"scope": 8,
+									"src": "122:12:0",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_uint256",
+										"typeString": "uint256"
+									},
+									"typeName": {
+										"id": 6,
+										"name": "uint256",
+										"nodeType": "ElementaryTypeName",
+										"src": "122:7:0",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint256",
+											"typeString": "uint256"
+										}
+									},
+									"visibility": "internal"
+								}
+							],
+							"name": "TBNode",
+							"nameLocation": "65:6:0",
+							"nodeType": "StructDefinition",
+							"scope": 9,
+							"src": "58:79:0",
+							"visibility": "public"
+						}
+					],
+					"src": "0:137:0"
+				},
+				"id": 0
+			}
+		}
+	}
+}

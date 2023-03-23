@@ -41,7 +41,7 @@ contract FlowerStorage is Ownable {
     // stores actual nodes based on index
     mapping(address => mapping(uint256 => TBNode)) public tbNodeByIndex;
 
-    event SetFlowerConductor(address indexed flowerConductorAddress);
+    event SetFlowerConductor(address indexed _flowerConductorAddress);
 
     // set flower conductor
     function setFlowerConductor(address _addr) public onlyOwner {
@@ -114,32 +114,32 @@ contract FlowerStorage is Ownable {
     }
 
     // add a node to TBNode linked list when a user picks flowers
-    function addNode(address addr, uint256 timestamp, uint256 balance) public onlyFlowerConductor {
+    function addNode(address _addr, uint256 _timestamp, uint256 _balance) public onlyFlowerConductor {
         // create a new TBNode
         TBNode memory newNode = TBNode({
-            timestamp: timestamp,
-            balance: balance,
+            timestamp: _timestamp,
+            balance: _balance,
             next: 0
         });
 
         // get the index of the last node in the linked list
-        uint256 lastIndex = lastTBNode[addr];
+        uint256 lastIndex = lastTBNode[_addr];
 
         // store the new node in the tbNodeByIndex mapping with a new index
         uint256 newIndex = lastIndex + 1;
-        tbNodeByIndex[addr][newIndex] = newNode;
+        tbNodeByIndex[_addr][newIndex] = newNode;
 
         // update the next field of the previous last node to point to the new node
         if (lastIndex != 0) {
-            tbNodeByIndex[addr][lastIndex].next = newIndex;
+            tbNodeByIndex[_addr][lastIndex].next = newIndex;
         }
 
         // update the lastTBNode mapping to point to the new node
-        lastTBNode[addr] = newIndex;
+        lastTBNode[_addr] = newIndex;
 
         // if this is the first node, also update the firstTBNode mapping to point to it
-        if (firstTBNode[addr] == 0) {
-            firstTBNode[addr] = newIndex;
+        if (firstTBNode[_addr] == 0) {
+            firstTBNode[_addr] = newIndex;
         }
     }
 
